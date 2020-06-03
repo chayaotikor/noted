@@ -4,7 +4,7 @@ exports.up = function (knex, Promise) {
 		tbl.string("title").notNullable();
 		tbl.string("textBody").notNullable();
 		tbl.timestamp("createdAt").defaultTo(knex.fn.now());
-		table.timestamp("updatedAt").defaultTo(knex.fn.now());
+		tbl.timestamp("updatedAt").defaultTo(knex.fn.now());
 	})
 	  .raw(`
     CREATE OR REPLACE FUNCTION update_updated_at_column()
