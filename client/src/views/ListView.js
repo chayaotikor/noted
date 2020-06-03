@@ -36,6 +36,7 @@ export const ListView = (props) => {
 						>
 							<Section>
 								<H2 component="list">{note.title}</H2>
+								<H2 component="list">{note.updatedAt}</H2>
 							</Section>
 						</Link>
 					) : null

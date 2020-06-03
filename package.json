@@ -1,7 +1,7 @@
 {
 	"name": "noted",
 	"version": "1.0.0",
-	"description": "small sticky note app",
+	"description": "note app",
 	"main": "index.js",
 	"repository": "https://github.com/cotikor/noted.git",
 	"author": "Chaya Otikor <c.otikor@gmail.com>",

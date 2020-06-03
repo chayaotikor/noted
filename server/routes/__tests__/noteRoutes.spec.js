@@ -15,6 +15,9 @@ describe("notes routes", () => {
 					id: expect.any(Number),
 					title: expect.any(String),
 					textBody: expect.any(String),
+					createdAt: expect.any(String),
+					updatedAt: expect.any(String),
+
 				},
 			});
             const response = await request(server).get("/api/notes/20");
@@ -39,13 +42,13 @@ describe("notes routes", () => {
 				title: "changed title",
 				textBody: "changed text body",
 			};
-			const response = await request(server).put("/api/notes/1").send(note);
+			const response = await request(server).put("/api/notes/10").send(note);
 			expect(response.body).toEqual({ updatedRecords: 1 });
 		});
 	});
 	describe("DELETE note", () => {
 		it("should delete a note", async () => {
-			const response = await request(server).delete("/api/notes/1");
+			const response = await request(server).delete("/api/notes/10");
 			expect(response.body).toEqual({ deletedRecords: 1 });
 		});
 	});
