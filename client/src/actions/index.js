@@ -11,7 +11,7 @@ export const SEARCH = "SEARCH";
 export const requestNotes = () => (dispatch) => {
 	dispatch({ type: REQUEST_SENT });
 	axios
-		.get(`http://localhost:8000/api/notes`)
+		.get(`https://cotikor-noted-api.herokuapp.com/api/notes`)
 		.then((response) => {
 			dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
 		})
@@ -23,10 +23,10 @@ export const requestNotes = () => (dispatch) => {
 export const addNote = (note) => (dispatch) => {
 	dispatch({ type: ADD });
 	axios
-		.post(`http://localhost:8000/api/notes`, note)
+		.post(`https://cotikor-noted-api.herokuapp.com/api/notes`, note)
 		.then((response) => {
 			dispatch({ type: ADD, id: response.data.success });
-			return axios.get(`http://localhost:8000/api/notes`);
+			return axios.get(`https://cotikor-noted-api.herokuapp.com/api/notes`);
 		})
 		.then((response) => {
 			dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
@@ -40,9 +40,9 @@ export const editNote = (note, id) => (dispatch) => {
 	dispatch({ type: UPDATE });
 	console.log(note);
 	axios
-		.put(`http://localhost:8000/api/notes/${id}`, note)
+		.put(`https://cotikor-noted-api.herokuapp.com/api/notes/${id}`, note)
 		.then((response) => {
-			return axios.get(`http://localhost:8000/api/notes`);
+			return axios.get(`https://cotikor-noted-api.herokuapp.com/api/notes`);
 		})
 		.then((response) => {
 			dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
@@ -55,9 +55,9 @@ export const editNote = (note, id) => (dispatch) => {
 export const deleteNote = (id) => (dispatch) => {
 	dispatch({ type: DELETE });
 	axios
-		.delete(`http://localhost:8000/api/notes/${id}`)
+		.delete(`https://cotikor-noted-api.herokuapp.com/api/notes/${id}`)
 		.then((response) => {
-			return axios.get(`http://localhost:8000/api/notes`);
+			return axios.get(`https://cotikor-noted-api.herokuapp.com/api/notes`);
 		})
 		.then((response) => {
 			dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
