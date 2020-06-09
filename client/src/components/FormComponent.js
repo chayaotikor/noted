@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { NoteForm, H1, NoteFormInput, Textarea, Button } from "../style";
+import {
+	NoteForm,
+	H1,
+	NoteFormInput,
+	Textarea,
+	ButtonContainer,
+	Button,
+} from "../style";
 
 class FormComponent extends Component {
 	constructor(props) {
@@ -8,8 +15,8 @@ class FormComponent extends Component {
 			note: {
 				title: "",
 				textBody: "",
-				id: props.id
-			}
+				_id: props.id,
+			},
 		};
 	}
 
@@ -18,8 +25,8 @@ class FormComponent extends Component {
 		this.setState({
 			note: {
 				...this.state.note,
-				[event.target.name]: event.target.value
-			}
+				[event.target.name]: event.target.value,
+			},
 		});
 	};
 
@@ -42,7 +49,7 @@ class FormComponent extends Component {
 				onSubmit={(event) => {
 					event.preventDefault();
 					this.handleMode();
-					this.props.history.push("/notes");
+					this.props.history.push("/");
 				}}
 			>
 				<H1>{this.props.header}</H1>
@@ -61,9 +68,25 @@ class FormComponent extends Component {
 					rows="10"
 					onChange={this.handleChange}
 				/>
-				<Button type="submit" component="form">
-					{this.props.buttonText}
-				</Button>
+				<ButtonContainer>
+					<Button type="submit" component="form">
+						{this.props.buttonText}
+					</Button>
+					<Button
+						onClick={(event) => {
+							event.preventDefault();
+							this.props.toggleMode("default");
+							if (this.props.mode === "edit") {
+								this.props.history.push(`/notes/${this.props.id}`);
+							} else {
+								this.props.history.push(`/`);
+							}
+						}}
+						component="form"
+					>
+						Cancel
+					</Button>
+				</ButtonContainer>
 			</NoteForm>
 		);
 	}

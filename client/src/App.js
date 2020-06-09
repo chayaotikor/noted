@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GlobalStyle, AppContainer } from "./style";
+import { GlobalStyle, AppContainer, AppHeader } from "./style";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -7,7 +7,8 @@ import {
 	addNote,
 	editNote,
 	deleteNote,
-	sorting,
+	sortAscending,
+	sortDescending,
 	searching
 } from "./actions";
 //Views
@@ -45,8 +46,11 @@ class App extends Component {
 		}
 	};
 
-	sort = () => {
-		this.props.sorting();
+	sortAscending = () => {
+		this.props.sortAscending();
+	};
+	sortDescending = () => {
+		this.props.sortDescending();
 	};
 
 	search = (e) => {
@@ -76,11 +80,11 @@ class App extends Component {
 	};
 
 	render() {
-		// console.log("notes app", this.props.notes);
 		return (
 			<>
 				<GlobalStyle />
 				<AppContainer mode={this.state.mode}>
+					<AppHeader>Noted</AppHeader>
 					<Route
 						path={"/notes/:id/edit"}
 						render={(props) => (
@@ -135,7 +139,8 @@ class App extends Component {
 						)}
 					/>
 					<Route
-						exact path={"/notes"}
+						exact
+						path={"/"}
 						render={(props) => (
 							<ListView
 								notes={this.props.notes}
@@ -144,10 +149,8 @@ class App extends Component {
 								addNote={this.addNote}
 								id={this.props.match.params.id}
 								handleChange={this.handleChange}
-								onDragOver={this.onDragOver}
-								onDrop={this.onDrop}
-								onDragStart={this.onDragStart}
-								sort={this.sort}
+								sortAscending={this.sortAscending}
+								sortDescending={this.sortDescending}
 								search={this.search}
 								history={this.props.history}
 							/>
@@ -171,7 +174,8 @@ export default connect(
 		addNote,
 		editNote,
 		deleteNote,
-		sorting,
+		sortAscending,
+		sortDescending,
 		searching
 	}
 )(App);

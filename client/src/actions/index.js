@@ -5,7 +5,8 @@ export const REQUEST_ERROR = "REQUEST_ERROR";
 export const ADD = "ADD";
 export const UPDATE = "UPDATE";
 export const DELETE = "DELETE";
-export const SORT = "SORT";
+export const SORTASC = "SORTASC";
+export const SORTDSC = "SORTDSC";
 export const SEARCH = "SEARCH";
 
 export const requestNotes = () => (dispatch) => {
@@ -67,7 +68,7 @@ export const deleteNote = (id) => (dispatch) => {
 		});
 };
 
-export const sorting = () => (dispatch) => {
+export const sortAscending = () => (dispatch) => {
 	function compare(a, b) {
 		const titleA = a.title.toUpperCase();
 		const titleB = b.title.toUpperCase();
@@ -79,7 +80,21 @@ export const sorting = () => (dispatch) => {
 		}
 		return comparison;
 	}
-	dispatch({ type: SORT, payload: compare });
+	dispatch({ type: SORTASC, payload: compare });
+};
+export const sortDescending = () => (dispatch) => {
+	function compare(a, b) {
+		const titleA = a.title.toUpperCase();
+		const titleB = b.title.toUpperCase();
+		let comparison = 0;
+		if (titleA < titleB) {
+			comparison = 1;
+		} else if (titleA > titleB) {
+			comparison = -1;
+		}
+		return comparison;
+	}
+	dispatch({ type: SORTDSC, payload: compare });
 };
 
 export const searching = (searchTerm) => (dispatch) => {

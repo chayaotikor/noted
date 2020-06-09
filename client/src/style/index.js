@@ -1,6 +1,6 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
-import { CSVLink } from "react-csv";
 import reset from "styled-reset";
+import xIcon from "./x-icon.png";
 
 //Global Styles
 export const GlobalStyle = createGlobalStyle`
@@ -17,11 +17,11 @@ html{
 	font-size: 62.5%;
 }
 body {
+	background: #ffaf9c;
 	display: flex;
 	flex-flow: column nowrap;
 	justify-content: center;
 	align-items: center;
-	background: #FFEADE;
 	@import url('https://fonts.googleapis.com/css?family=Charm|Dancing+Script:400');
 }
 `;
@@ -39,18 +39,26 @@ export const pulse = keyframes`
 //Main Containers
 export const AppContainer = styled.main`
 	background: #ffaf9c;
-	padding: 5%;
-	margin: 2.5%;
-	width: 600px;
+	height: 100vh;
+	padding: 2.5%;
+	position: relative;
+	max-width: 600px;
 	display: flex;
 	flex-flow: column nowrap;
 	justify-content: center;
 	align-items: center;
-	border-radius: 10px;
-	z-index:0;
-	-webkit-box-shadow: 0px 0px 45px -11px rgba(0, 0, 0, 0.38);
-	-moz-box-shadow: 0px 0px 45px -11px rgba(0, 0, 0, 0.38);
-	box-shadow: 0px 0px 45px -11px rgba(0, 0, 0, 0.38);
+	z-index: 0;
+`;
+
+export const AppHeader = styled.h1`
+	font-family: "Dancing Script", cursive;
+	font-size: 4rem;
+	position: absolute;
+	top: 0;
+	padding-top: 2.5%;
+	color: #4c132c;
+	text-align: center;
+	font-weight: bold;
 `;
 
 export const ModalDiv = styled.div`
@@ -69,18 +77,22 @@ export const ModalDiv = styled.div`
 `;
 
 export const NoteListSection = styled.section`
+	background: #ffeade;
 	width: 100%;
+	max-height: 55vh;
 	display: flex;
-	margin: 2.5% 10%;
-	padding: 5% 0;
+	padding: 2.5%;
+	overflow-y: scroll;
+	border-radius: 10px;
 	justify-content: space-around;
 	align-items: center;
+	border: 1px solid #4c132c;
 	flex-flow: row wrap;
 `;
 
-export const Section = styled.section`
+export const NoteContainer = styled.section`
 	width: 100px;
-	height: 125px;
+	height: 100px;
 	overflow: hidden;
 	display: flex;
 	background: #4c132c;
@@ -92,7 +104,6 @@ export const Section = styled.section`
 	border-radius: 10%;
 	margin: 2.5% 0;
 	text-align: center;
-	border: 2px dashed #fff;
 	color: #fff;
 	:hover {
 		animation: ${pulse} 1s infinite;
@@ -171,6 +182,27 @@ export const SearchInput = styled.input`
 	}
 `;
 
+//Sort Elements
+export const SortContainer = styled.div`
+	display: flex;
+	width: 80%;
+	margin: 2.5%;
+	justify-content: space-between;
+	align-items: center;
+`;
+
+export const SortH2 = styled.h2`
+	font-family: "Charm", cursive;
+	text-align: center;
+	font-size: 1.6rem;
+	color: #4c132c;
+	cursor: pointer;
+	:hover {
+		color: "#FFF";
+		font-weight: bold;
+	}
+`;
+
 //Form Elements
 
 export const NoteForm = styled.form`
@@ -195,7 +227,7 @@ export const NoteFormInput = styled.input`
 `;
 
 export const Textarea = styled.textarea`
-	width: 100%;
+	max-width: 100%;
 	padding: 10%;
 	font-family: "Charm", cursive;
 	border-radius: 10px;
@@ -215,6 +247,7 @@ export const ButtonContainer = styled.div`
 	justify-content: space-around;
 	align-items: center;
 	width: 50%;
+	margin-top: 5%;
 `;
 
 export const Button = styled.button`
@@ -222,8 +255,8 @@ export const Button = styled.button`
 	text-decoration: none;
 	font-size: 1.6rem;
 	color: white;
-	padding: ${(props) => (props.component === "form" ? "2.5%" : "5%")};
-	margin: ${(props) => (props.component === "single" ? "2.5%" : "5% 1%")};
+	padding: 2.5%;
+	margin: 2.5% 1%;
 	border: 2px solid #ffffff;
 	border-radius: 10px;
 	width: 200px;
@@ -242,19 +275,22 @@ export const Button = styled.button`
 	}
 `;
 
-export const ActionContainer = styled.div`
-	border: 1px solid red;
-	width: 50%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+export const DeleteButton = styled.button`
+	position: absolute;
+	right: 0;
+	top: 0;
+	background-color: #4c132c;
+	border: none;
+	border-radius: 50%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(${xIcon});
+	height: 24px;
+	width: 24px;
+	:hover {
+		cursor: pointer;
+		50% {
+			transform: scale(1.1);
+		}
+	}
 `;
-
-export const StyledCSVLink = styled(CSVLink)`
-	fontSize: 1rem;
-				color: white;
-				textDecoration: none;
-				fontFamily: ""Charm", cursive;
-
-`;
-

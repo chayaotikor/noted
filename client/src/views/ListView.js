@@ -1,22 +1,24 @@
 import React from "react";
 import {
-	Section,
+	NoteContainer,
+	SortH2,
 	H2,
 	H1,
 	NoteListSection,
 	Button,
+	DeleteButton,
 	SearchContainer,
 	SearchInput,
 	ButtonContainer,
+	SortContainer,
 } from "../style";
-import { CSVComponent } from "../components/CSVComponent";
+import moment from "moment";
 
 import { Link } from "react-router-dom";
 
 export const ListView = (props) => {
 	return (
 		<>
-			<H1>Noted</H1>
 			<SearchContainer onSubmit={(event) => props.search(event)}>
 				<SearchInput
 					name="searchTerm"
@@ -25,37 +27,32 @@ export const ListView = (props) => {
 					type="text"
 				/>
 			</SearchContainer>
+			<SortContainer>
+				<SortH2 onClick={props.sortAscending}>Sort A-Z</SortH2>
+				<SortH2 onClick={props.sortDescending}>Sort Z-A</SortH2>
+			</SortContainer>
 
 			<NoteListSection>
-				{props.notes.map((note, index) =>
-					index < 9 ? (
-						<Link
-							to={`/notes/${note.id}`}
-							key={index}
-							style={{ textDecoration: "none" }}
-						>
-							<Section>
-								<H2 component="list">{note.title}</H2>
-								<H2 component="list">{note.updatedAt}</H2>
-							</Section>
-						</Link>
-					) : null
-				)}
-			</NoteListSection>
-			<H2 onClick={props.sort} sort>
-				Sort
-			</H2>
-			<ButtonContainer>
-				<Button
-					onClick={(event) => {
-						event.preventDefault();
-						props.toggleMode("default");
-						props.history.push("/notes");
-					}}
-				>
-					View All Notes
-				</Button>
+				{props.notes.map((note, index) => (
+					<Link
+						to={`/notes/${note.id}`}
+						key={index}
+						style={{ textDecoration: "none" }}
+					>
+						<NoteContainer>
+							<H2 component="list">{note.title}</H2>
+							<DeleteButton
+								onClick={(event) => {
+									event.preventDefault();
+									props.toggleMode("delete");
+								}}
+							/>
 
+						</NoteContainer>
+					</Link>
+				))}
+			</NoteListSection>
+			<ButtonContainer>
 				<Button
 					onClick={(event) => {
 						event.preventDefault();
@@ -66,7 +63,6 @@ export const ListView = (props) => {
 					+ Create New Note
 				</Button>
 			</ButtonContainer>
-					<CSVComponent notes={props.notes} />
 		</>
 	);
 };

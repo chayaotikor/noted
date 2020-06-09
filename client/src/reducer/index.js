@@ -5,7 +5,8 @@ import {
 	ADD,
 	UPDATE,
 	DELETE,
-	SORT,
+	SORTASC,
+	SORTDSC,
 	SEARCH
 } from "../actions";
 
@@ -59,7 +60,12 @@ export const reducer = (state = initialState, action) => {
 				requestingData: false,
 				notes: [...state.notes]
 			};
-		case SORT:
+		case SORTASC:
+			return {
+				...state,
+				notes: state.notes.slice().sort(action.payload)
+			};
+		case SORTDSC:
 			return {
 				...state,
 				notes: state.notes.slice().sort(action.payload)

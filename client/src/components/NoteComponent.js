@@ -4,7 +4,7 @@ import {SingleView} from "../views/SingleView";
 import {DeleteModal} from "./DeleteModal";
 
 export const NoteComponent = (props) => {
-	const id = props.match.params.id;
+	const {id} = props.match.params;
 	if (props.mode === "edit") {
 		return (
 			<FormComponent
@@ -37,6 +37,7 @@ export const NoteComponent = (props) => {
 				toggleMode={props.toggleMode}
 				component="single"
 				id={id}
+				history={props.history}
 			/>
 		);
 	}

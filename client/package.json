@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.2",
+    "moment": "^2.26.0",
     "react": "^16.13.1",
     "react-csv": "^1.0.19",
     "react-dnd": "^7.0.2",
