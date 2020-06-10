@@ -17,6 +17,20 @@ html{
 	font-size: 62.5%;
 }
 body {
+	 scrollbar-color: #4c132c #ffeade; 
+  scrollbar-width: thin;
+  ::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffeade;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4c132c;
+  border-right: 1px solid #ffeade;
+}
 	background: #ffaf9c;
 	display: flex;
 	flex-flow: column nowrap;
@@ -59,18 +73,24 @@ export const AppHeader = styled.h1`
 	color: #4c132c;
 	text-align: center;
 	font-weight: bold;
+	display: ${(props) =>
+		props.mode === "single"
+			? "none"
+			: props.mode === "create"
+			? "none"
+			: props.mode === "edit"
+			? "none"
+			: "block"};
 `;
 
 export const ModalDiv = styled.div`
 	z-index: 10;
 	opacity: 1;
-	background: #4c132c;
 	border-radius: 10px;
-	width: 100%;
-	border: 2px dashed #fff;
+	width: 100wv;
 	display: flex;
-	margin: 2.5% 10%;
-	padding: 5% 0;
+	margin: 2.5%;
+	padding: 2.5% 0;
 	justify-content: space-around;
 	align-items: center;
 	flex-flow: column wrap;
@@ -79,15 +99,16 @@ export const ModalDiv = styled.div`
 export const NoteListSection = styled.section`
 	background: #ffeade;
 	width: 100%;
-	max-height:65vh;
+	max-height: 65vh;
 	display: flex;
 	padding: 2.5%;
 	overflow-y: scroll;
-	border-radius: 10px;
 	justify-content: space-around;
 	align-items: center;
-	border: 1px solid #4c132c;
 	flex-flow: row wrap;
+	-webkit-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+	-moz-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+	box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
 `;
 
 export const NoteContainer = styled.section`
@@ -105,6 +126,7 @@ export const NoteContainer = styled.section`
 	margin: 2.5% 0;
 	text-align: center;
 	color: #fff;
+
 	:hover {
 		animation: ${pulse} 1s infinite;
 		background: white;
@@ -112,6 +134,9 @@ export const NoteContainer = styled.section`
 		border: 2px dashed #4c132c;
 		border-radius: 10%;
 		cursor: pointer;
+		-webkit-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+		-moz-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+		box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
 	}
 `;
 
@@ -119,7 +144,7 @@ export const NoteContainer = styled.section`
 
 export const H1 = styled.h1`
 	font-family: "Dancing Script", cursive;
-	font-size: 3rem;
+	font-size: ${(props) => (props.component === "delete" ? "2.5rem" : "3rem")};
 	color: ${(props) => (props.component === "delete" ? "#FFFFFF" : "#4C132C")};
 	text-align: center;
 	justify-self: flex-start;
@@ -145,31 +170,22 @@ export const P = styled.p`
 	border: ${(props) =>
 		props.component === "single" ? "2px dashed #4C132C" : null};
 	padding: ${(props) => (props.component === "single" ? "5%" : null)};
-	width: 300px;
-	height: 50vh;
+	width: 100%;
+	height: 60vh;
 	overflow: hidden auto;
 	text-align: justify;
-	::-webkit-scrollbar {
-		width: 10px;
-	}
-	::-webkit-scrollbar-track {
-		background: #c3d2d5;
-	}
-	::-webkit-scrollbar-thumb {
-		background: #4c132c;
-	}
+
 `;
 
 //Search Elements
 export const SearchContainer = styled.form`
-					justify-content: space-between;
-					align-items: center;
-					display: ${(props) =>
-						props.mode === "list" ? "flex" : "none"};
-					flex-flow: column nowrap;
-					width: 100%;
-					padding: 2.5% 0 0;
-				`;
+	justify-content: space-between;
+	align-items: center;
+	display: ${(props) => (props.mode === "list" ? "flex" : "none")};
+	flex-flow: column nowrap;
+	width: 100%;
+	padding: 2.5% 0 0;
+`;
 
 export const SearchInput = styled.input`
 	width: 100%;
@@ -186,12 +202,12 @@ export const SearchInput = styled.input`
 
 //Sort Elements
 export const SortContainer = styled.div`
-					display: flex;
-					width: 80%;
-					padding: 2.5%;
-					justify-content: space-between;
-					align-items: center;
-				`;
+	display: flex;
+	width: 80%;
+	padding: 2.5%;
+	justify-content: space-between;
+	align-items: center;
+`;
 
 export const SortH2 = styled.h2`
 	font-family: "Charm", cursive;
@@ -208,15 +224,16 @@ export const SortH2 = styled.h2`
 //Form Elements
 
 export const NoteForm = styled.form`
-	justify-content: space-between;
+justify-content: space-between;
 	align-items: center;
 	display: flex;
 	flex-flow: column nowrap;
-	width: 450px;
+	width: 90vw;
+	max-width: 600px;
 `;
 
 export const NoteFormInput = styled.input`
-	width: 40%;
+	width: 70%;
 	padding: 2.5%;
 	font-family: "Charm", cursive;
 	border-radius: 10px;
@@ -229,13 +246,13 @@ export const NoteFormInput = styled.input`
 `;
 
 export const Textarea = styled.textarea`
-	max-width: 100%;
+	width: 100%;
 	padding: 10%;
 	font-family: "Charm", cursive;
 	border-radius: 10px;
 	border: 2px dashed #4c132c;
 	text-align: center;
-	margin-top: 5%;
+	margin-top: 2.5%;
 	:focus {
 		outline: none;
 	}
@@ -259,7 +276,7 @@ export const Button = styled.button`
 	color: white;
 	padding: 2.5%;
 	margin: 2.5% 1%;
-	border: 2px solid #ffffff;
+	border: none;
 	border-radius: 10px;
 	width: 200px;
 	background: #4c132c;
@@ -271,6 +288,9 @@ export const Button = styled.button`
 		color: #4c132c;
 		border: 2px dashed #4c132c;
 		cursor: pointer;
+		-webkit-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+		-moz-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+		box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
 	}
 	:focus {
 		outline: none;
@@ -279,18 +299,18 @@ export const Button = styled.button`
 
 export const DeleteButton = styled.button`
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 5px;
+	top: 5px;
 	background-color: #4c132c;
 	border: none;
 	border-radius: 50%;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-image: url(${xIcon});
-	height: 24px;
-	width: 24px;
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
 	:hover {
-		cursor: pointer;
 		50% {
 			transform: scale(1.1);
 		}

@@ -41,7 +41,7 @@ class App extends Component {
 		// console.log("requesting....");
 	}
 
-	//Search Methods
+	//Search/Sort Methods
 	handleChange = (event) => {
 		event.preventDefault();
 		this.setState({
@@ -91,8 +91,11 @@ class App extends Component {
 			<>
 				<GlobalStyle />
 				<AppContainer mode={this.state.mode}>
-					<AppHeader>Noted</AppHeader>
-					<SearchContainer onSubmit={(event) => this.search(event)} mode={this.state.mode}>
+					<AppHeader mode={this.state.mode}>Noted</AppHeader>
+					<SearchContainer
+						onSubmit={(event) => this.search(event)}
+						mode={this.state.mode}
+					>
 						<SearchInput
 							name="searchTerm"
 							onChange={(e) => this.handleChange(e)}
@@ -105,9 +108,11 @@ class App extends Component {
 						</SortContainer>
 					</SearchContainer>
 					<Route
+						exact
 						path={"/notes/:id/edit"}
 						render={(props) => (
 							<FormComponent
+								{...props}
 								header={"Update Existing Note"}
 								mode={this.state.mode}
 								buttonText="Update"
@@ -120,6 +125,19 @@ class App extends Component {
 						)}
 					/>
 					<Route
+						exact
+						path={"/notes/:id/delete"}
+						render={(props) => (
+							<DeleteModal
+								{...props}
+								toggleMode={this.toggleMode}
+								deleteNote={this.deleteNote}
+								history={this.props.history}
+							/>
+						)}
+					/>
+					<Route
+						exact
 						path={"/notes/:id"}
 						render={(props) => (
 							<NoteComponent
@@ -132,17 +150,7 @@ class App extends Component {
 							/>
 						)}
 					/>
-					<Route
-						path={"/notes/:id/delete"}
-						render={(props) => (
-							<DeleteModal
-								id={this.props.match.id}
-								toggleMode={this.toggleMode}
-								deleteNote={this.deleteNote}
-								history={this.props.history}
-							/>
-						)}
-					/>
+
 					<Route
 						path={"/form/create"}
 						render={(props) => (
@@ -162,6 +170,7 @@ class App extends Component {
 						path={"/"}
 						render={(props) => (
 							<ListView
+								setID={this.setID}
 								notes={this.props.notes}
 								mode={this.state.mode}
 								toggleMode={this.toggleMode}

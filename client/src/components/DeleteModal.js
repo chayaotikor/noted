@@ -8,9 +8,9 @@ export const DeleteModal = (props) => {
 			<Button
 				onClick={(event) => {
 					event.preventDefault();
-					props.history.push("/notes");
-					props.toggleMode("default");
-					props.deleteNote(props.id);
+					props.history.push("/");
+					props.toggleMode("list");
+					props.deleteNote(props.match.params.id);
 				}}
 			>
 				Delete
@@ -18,7 +18,8 @@ export const DeleteModal = (props) => {
 			<Button
 				onClick={(event) => {
 					event.preventDefault();
-					props.toggleMode("default");
+					props.toggleMode("list");
+					props.history.push("/");
 				}}
 			>
 				Cancel

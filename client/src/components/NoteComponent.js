@@ -1,7 +1,6 @@
 import React from "react";
 import FormComponent from "./FormComponent";
 import {SingleView} from "../views/SingleView";
-import {DeleteModal} from "./DeleteModal";
 
 export const NoteComponent = (props) => {
 	const {id} = props.match.params;
@@ -17,18 +16,7 @@ export const NoteComponent = (props) => {
 				id={id}
 				history={props.history}
 			/>
-		);
-	} else if (props.mode === "delete") {
-		return (
-			<>
-				<DeleteModal
-					id={id}
-					toggleMode={props.toggleMode}
-					deleteNote={props.deleteNote}
-					history={props.history}
-				/>
-			</>
-		);
+		);	
 	} else {
 		return (
 			<SingleView
