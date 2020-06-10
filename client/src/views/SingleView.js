@@ -21,7 +21,7 @@ export const SingleView = (props) => {
 					<Button
 						onClick={(event) => {
 							event.preventDefault();
-							props.toggleMode("default");
+							props.toggleMode("list");
 							props.history.push("/");
 						}}
 						component="form"

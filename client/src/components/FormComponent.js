@@ -32,13 +32,13 @@ class FormComponent extends Component {
 
 	handleMode = () => {
 		if (this.props.mode === "create") {
-			this.props.toggleMode("default");
+			this.props.toggleMode("list");
 			return this.props.addNote(this.state.note);
 		} else if (this.props.mode === "edit") {
-			this.props.toggleMode("default");
+			this.props.toggleMode("list");
 			return this.props.editNote(this.state.note, this.props.id);
 		} else {
-			this.props.toggleMode("default");
+			this.props.toggleMode("list");
 			return null;
 		}
 	};
@@ -75,10 +75,11 @@ class FormComponent extends Component {
 					<Button
 						onClick={(event) => {
 							event.preventDefault();
-							this.props.toggleMode("default");
 							if (this.props.mode === "edit") {
+								this.props.toggleMode("single");
 								this.props.history.push(`/notes/${this.props.id}`);
 							} else {
+								this.props.toggleMode("list");
 								this.props.history.push(`/`);
 							}
 						}}

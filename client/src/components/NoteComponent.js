@@ -27,7 +27,6 @@ export const NoteComponent = (props) => {
 					deleteNote={props.deleteNote}
 					history={props.history}
 				/>
-
 			</>
 		);
 	} else {

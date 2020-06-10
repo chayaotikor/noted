@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { GlobalStyle, AppContainer, AppHeader } from "./style";
+import {
+	GlobalStyle,
+	AppContainer,
+	AppHeader,
+	SortH2,
+	SearchContainer,
+	SearchInput,
+	SortContainer,
+} from "./style";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -9,7 +17,7 @@ import {
 	deleteNote,
 	sortAscending,
 	sortDescending,
-	searching
+	searching,
 } from "./actions";
 //Views
 import { ListView } from "./views/ListView";
@@ -19,13 +27,12 @@ import { NoteComponent } from "./components/NoteComponent";
 import { DeleteModal } from "./components/DeleteModal";
 import FormComponent from "./components/FormComponent";
 
-
 class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mode: "default",
-			searchTerm: ""
+			mode: "list",
+			searchTerm: "",
 		};
 	}
 
@@ -39,7 +46,7 @@ class App extends Component {
 		event.preventDefault();
 		this.setState({
 			...this.state,
-			[event.target.name]: event.target.value
+			[event.target.name]: event.target.value,
 		});
 		if (event.target.value.length === 0) {
 			this.props.requestNotes();
@@ -75,7 +82,7 @@ class App extends Component {
 	toggleMode = (mode) => {
 		this.setState({
 			...this.state,
-			mode
+			mode,
 		});
 	};
 
@@ -85,6 +92,18 @@ class App extends Component {
 				<GlobalStyle />
 				<AppContainer mode={this.state.mode}>
 					<AppHeader>Noted</AppHeader>
+					<SearchContainer onSubmit={(event) => this.search(event)} mode={this.state.mode}>
+						<SearchInput
+							name="searchTerm"
+							onChange={(e) => this.handleChange(e)}
+							placeholder={"search notes..."}
+							type="text"
+						/>
+						<SortContainer>
+							<SortH2 onClick={this.sortAscending}>Sort A-Z</SortH2>
+							<SortH2 onClick={this.sortDescending}>Sort Z-A</SortH2>
+						</SortContainer>
+					</SearchContainer>
 					<Route
 						path={"/notes/:id/edit"}
 						render={(props) => (
@@ -165,17 +184,14 @@ class App extends Component {
 const mapStateToProps = (state) => ({
 	notes: state.notes,
 	requestingData: state.requestingData,
-	newId: state.newId
+	newId: state.newId,
 });
-export default connect(
-	mapStateToProps,
-	{
-		requestNotes,
-		addNote,
-		editNote,
-		deleteNote,
-		sortAscending,
-		sortDescending,
-		searching
-	}
-)(App);
+export default connect(mapStateToProps, {
+	requestNotes,
+	addNote,
+	editNote,
+	deleteNote,
+	sortAscending,
+	sortDescending,
+	searching,
+})(App);

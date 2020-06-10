@@ -55,7 +55,7 @@ export const AppHeader = styled.h1`
 	font-size: 4rem;
 	position: absolute;
 	top: 0;
-	padding-top: 2.5%;
+	padding: 1% 0;
 	color: #4c132c;
 	text-align: center;
 	font-weight: bold;
@@ -79,7 +79,7 @@ export const ModalDiv = styled.div`
 export const NoteListSection = styled.section`
 	background: #ffeade;
 	width: 100%;
-	max-height: 55vh;
+	max-height:65vh;
 	display: flex;
 	padding: 2.5%;
 	overflow-y: scroll;
@@ -162,12 +162,14 @@ export const P = styled.p`
 
 //Search Elements
 export const SearchContainer = styled.form`
-	justify-content: space-between;
-	align-items: center;
-	display: flex;
-	flex-flow: column nowrap;
-	width: 100%;
-`;
+					justify-content: space-between;
+					align-items: center;
+					display: ${(props) =>
+						props.mode === "list" ? "flex" : "none"};
+					flex-flow: column nowrap;
+					width: 100%;
+					padding: 2.5% 0 0;
+				`;
 
 export const SearchInput = styled.input`
 	width: 100%;
@@ -184,12 +186,12 @@ export const SearchInput = styled.input`
 
 //Sort Elements
 export const SortContainer = styled.div`
-	display: flex;
-	width: 80%;
-	margin: 2.5%;
-	justify-content: space-between;
-	align-items: center;
-`;
+					display: flex;
+					width: 80%;
+					padding: 2.5%;
+					justify-content: space-between;
+					align-items: center;
+				`;
 
 export const SortH2 = styled.h2`
 	font-family: "Charm", cursive;
