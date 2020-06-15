@@ -1,6 +1,9 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import reset from "styled-reset";
 import xIcon from "./x-icon.png";
+// font-family: 'Dancing Script', cursive;
+
+// font-family: 'Montserrat', sans-serif;
 
 //Global Styles
 export const GlobalStyle = createGlobalStyle`
@@ -22,10 +25,18 @@ body {
 	flex-flow: column nowrap;
 	justify-content: center;
 	align-items: center;
-    @import url('https://fonts.googleapis.com/css?family=Charm|Dancing+Script:400');
     scrollbar-color: #4c132c #ffeade; 
     scrollbar-width: thin;
-
+	::-webkit-scrollbar {
+		width: 7.5px;
+	}
+	::-webkit-scrollbar-track {
+		background: #ffeade;
+	}
+	::-webkit-scrollbar-thumb {
+		background: #4c132c;
+		border-right: 1px solid #ffeade;
+	}
 }
 `;
 
@@ -140,9 +151,9 @@ export const H1 = styled.h1`
 	font-weight: bold;
 `;
 export const H2 = styled.h2`
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	text-align: center;
-	font-size: ${(props) => (props.component === "single" ? "2.4rem" : "1.6rem")};
+	font-size: ${(props) => (props.component === "single" ? "2.4rem" : "1.2rem")};
 	padding: 0 5%;
 	color: ${(props) => (props.sort ? "#FFFFFF" : null)};
 	margin-bottom: 2.5%;
@@ -153,7 +164,7 @@ export const H2 = styled.h2`
 `;
 
 export const P = styled.p`
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	font-size: ${(props) => (props.component === "single" ? "1.2rem" : "1.4rem")};
 	background: ${(props) => (props.component === "single" ? "#FFFFFF" : null)};
 	border: ${(props) =>
@@ -179,7 +190,7 @@ export const SearchContainer = styled.form`
 export const SearchInput = styled.input`
 	width: 100%;
 	padding: 2.5%;
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	border-radius: 10px;
 	margin-top: 5%;
 	border: 2px dashed #4c132c;
@@ -199,9 +210,9 @@ export const SortContainer = styled.div`
 `;
 
 export const SortH2 = styled.h2`
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	text-align: center;
-	font-size: 1.6rem;
+	font-size: 1.4rem;
 	color: #4c132c;
 	cursor: pointer;
 	:hover {
@@ -224,7 +235,7 @@ justify-content: space-between;
 export const NoteFormInput = styled.input`
 	width: 70%;
 	padding: 2.5%;
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	border-radius: 10px;
 	margin-top: 5%;
 	border: 2px dashed #4c132c;
@@ -237,7 +248,7 @@ export const NoteFormInput = styled.input`
 export const Textarea = styled.textarea`
 	width: 100%;
 	padding: 10%;
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	border-radius: 10px;
 	border: 2px dashed #4c132c;
 	text-align: center;
@@ -259,7 +270,7 @@ export const ButtonContainer = styled.div`
 `;
 
 export const Button = styled.button`
-	font-family: "Charm", cursive;
+	font-family: 'Montserrat', sans-serif;
 	text-decoration: none;
 	font-size: 1.6rem;
 	color: white;
