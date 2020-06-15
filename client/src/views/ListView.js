@@ -2,13 +2,11 @@ import React from "react";
 import {
 	NoteContainer,
 	H2,
-	H1,
 	NoteListSection,
 	Button,
 	DeleteButton,
 	ButtonContainer,
 } from "../style";
-import { DeleteModal } from "../components/DeleteModal";
 import { Link } from "react-router-dom";
 
 export const ListView = (props) => {

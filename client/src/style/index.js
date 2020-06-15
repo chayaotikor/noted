@@ -17,26 +17,15 @@ html{
 	font-size: 62.5%;
 }
 body {
-	 scrollbar-color: #4c132c #ffeade; 
-  scrollbar-width: thin;
-  ::-webkit-scrollbar {
-  width: 7.5px;
-}
-
-::-webkit-scrollbar-track {
-  background: #ffeade;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #4c132c;
-  border-right: 1px solid #ffeade;
-}
 	background: #ffaf9c;
 	display: flex;
 	flex-flow: column nowrap;
 	justify-content: center;
 	align-items: center;
-	@import url('https://fonts.googleapis.com/css?family=Charm|Dancing+Script:400');
+    @import url('https://fonts.googleapis.com/css?family=Charm|Dancing+Script:400');
+    scrollbar-color: #4c132c #ffeade; 
+    scrollbar-width: thin;
+
 }
 `;
 
