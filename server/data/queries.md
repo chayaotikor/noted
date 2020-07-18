@@ -1,53 +1,45 @@
-# query {
-
-#   notes{
-
-#     createdBy{
-# 	_id
-#      email
-#       password
-
-#       createdNotes{
-
+# {
+#   getAllNotes {
+#     createdBy {
+#       _id
+#       email
+#       createdNotes {
 #         title
-
 #         textBody
 #         updatedAt
-
-#         createdBy{
-
+#         createdBy {
 #           email
-
-#           password
-
 #         }
-
 #       }
-
 #     }
-
 #   }
-
 # }
 
+
 # mutation {
-#   register(credentials: {email:"newer@email.com", password:"newpass"}){
+#   register(credentials: {email:"newer2@email.com", password:"newpass"}){
+#     _id
 #     email
-#     password
 #     token
 #   }
 # }
 
 # mutation {
-#   addNote(content: {title: "a new note", textBody:"here is a text body", updatedAt: "2020-07-18T17:54:29.455"})
+#   addNote(content: {title: "a new note", textBody:"here is a text body", createdBy:"5f134aa0e7b99404ece12176"})
 #   {
 #     _id
 #     title
 #     textBody
 #     createdBy{
 #       email
-#       password
 #     }
 #     updatedAt
 #   }
+# }
+
+# query{
+#  login(email:"newer2@email.com", password:"newpass"){
+#    _id,
+#    email,
+#  }
 # }

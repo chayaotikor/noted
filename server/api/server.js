@@ -3,7 +3,7 @@ const { graphqlHTTP } = require("express-graphql");
 const configureMiddleware = require("../middleware/globalMiddleware");
 const errorHandler = require("../middleware/errorMiddleware");
 const schema = require('../data/schemas/index')
-const resolvers = require('../data/resolvers/index')
+const {rootResolver} = require('../data/resolvers')
 
 const server = express();
 
@@ -13,7 +13,7 @@ server.use(
   "/graphql",
   graphqlHTTP({
     schema: schema,
-    rootValue: resolvers,
+    rootValue: rootResolver,
     graphiql: true,
   })
 );

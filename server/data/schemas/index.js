@@ -6,6 +6,7 @@ module.exports = buildSchema(`
      title: String!
      textBody: String!
      createdBy: User!
+     updatedAt: String!
  }
 
  input NoteInput {
@@ -16,7 +17,6 @@ module.exports = buildSchema(`
  type User {
      _id: ID!
      email: String!
-     password: String
      token: String!
      createdNotes: [Note!]
  }
@@ -26,12 +26,20 @@ module.exports = buildSchema(`
      password: String!
  }
 
+ type AuthData {
+     _id: ID!
+     email: String!
+     token: String!
+ }
+
  type RootQuery {
-     notes: [Note!]!
+     getAllNotes: [Note!]!
+     getNote(noteId: ID!): Note!
+     login(email: String!, password: String!): AuthData!
  }
 
  type RootMutation {
-     addNote(content: NoteInput): Note
+     addNote(content: NoteInput, userId: ID!): Note
      register(credentials: UserInput): User
  }
 
