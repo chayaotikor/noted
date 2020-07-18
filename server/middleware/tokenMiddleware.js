@@ -20,7 +20,6 @@ module.exports = {
 	},
 
 	generateToken: (user) => {
-        console.log("user",user)
 		const payload = {
 			id: user._id,
 			email: user.email

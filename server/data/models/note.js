@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+const autopopulate = require('mongoose-autopopulate')
 
 const noteSchema = new Schema({
     title: {
@@ -9,14 +10,13 @@ const noteSchema = new Schema({
         type: String,
         required: true
     },
-    updatedAt: {
-        type: Date,
-        required: true
-    },
     createdBy: {
         type: Schema.Types.ObjectId,
-        ref:  'User'
+        ref:  'User',
+        autopopulate:true
     }
-})
+}, {timestamps: true})
+
+noteSchema.plugin(autopopulate);
 
 module.exports = model('Note', noteSchema)
