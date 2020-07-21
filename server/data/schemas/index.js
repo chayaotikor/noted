@@ -18,6 +18,7 @@ module.exports = buildSchema(`
      _id: ID!
      email: String!
      token: String!
+     tokenExpiration: Int!
      createdNotes: [Note!]
  }
 
@@ -30,6 +31,7 @@ module.exports = buildSchema(`
      _id: ID!
      email: String!
      token: String!
+     tokenExpiration: Int!
  }
 
  type RootQuery {

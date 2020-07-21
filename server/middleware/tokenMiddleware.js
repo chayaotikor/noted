@@ -1,6 +1,9 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const responseStatus = require('../config/responseStatuses');
+const responseStatus = require('../config/responseStatuses')
+const errorHandler = require("../config/errorHandler");
+
+
 
 module.exports = {
 	protected: (req, res, next) => {
@@ -8,15 +11,14 @@ module.exports = {
 		if (token) {
 			jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
 				if (err) {
-					next(responseStatus.badCredentials);
+					errorHandler(responseStatus.badCredentials);
 				} else {
 					req.decodedToken = decodedToken;
 					next();
 				}
 			});
-		} else {
-			next(responseStatus.badCredentials);
-		}
+		} 
+		next()
 	},
 
 	generateToken: (user) => {
@@ -28,7 +30,7 @@ module.exports = {
 		const options = {
 			expiresIn: '1h'
 		};
-		console.log(payload);
+
 		return jwt.sign(payload, secret, options);
 	}
 };
