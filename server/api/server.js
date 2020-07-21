@@ -11,7 +11,7 @@ configureMiddleware(server);
 server.use(protected)
 
 server.use(
-  "/graphql",
+  "/api/notes",
   graphqlHTTP({
     schema: schema,
     rootValue: rootResolver,
