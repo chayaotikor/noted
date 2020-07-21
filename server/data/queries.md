@@ -17,15 +17,16 @@
 
 
 # mutation {
-#   register(credentials: {email:"newer2@email.com", password:"newpass"}){
+#   register(credentials: {email:"newer5@email.com", password:"newpass"}){
 #     _id
 #     email
 #     token
+#     tokenExpiration
 #   }
 # }
 
 # mutation {
-#   addNote(content: {title: "a new note", textBody:"here is a text body", createdBy:"5f134aa0e7b99404ece12176"})
+#   addNote(content: {title: "a new note", textBody:"here is a text body"}, userId:"5f134aa0e7b99404ece12176")
 #   {
 #     _id
 #     title
@@ -41,5 +42,7 @@
 #  login(email:"newer2@email.com", password:"newpass"){
 #    _id,
 #    email,
+#   token,
+#   tokenExpiration
 #  }
 # }

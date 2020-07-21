@@ -1,49 +1,61 @@
 const { seedingFunction } = require("../models/seeding");
 const Note = require("../models/note");
 const User = require("../models/user");
+const errorHandler = require("../../config/errorHandler");
+const responseStatus = require("../../config/responseStatuses");
 
 module.exports = {
-  getAllNotes: async () => {
+  getAllNotes: async (args, req) => {
+
+    if (!req.decodedToken) {
+      errorHandler(responseStatus.forbiddenAccess);
+    }
     // seedingFunction()
     try {
       const notes = await Note.find();
       return notes.map((note) => {
-        return { ...note._doc, };
+        return { ...note._doc };
       });
     } catch (err) {
-      throw err;
+      errorHandler(err);
     }
   },
 
-  getNote: async ({noteId}) => {
+  getNote: async ({ noteId }, req) => {
+    if (!req.decodedToken) {
+      errorHandler(responseStatus.forbiddenAccess);
+    }
     try {
-      const note = await Note.findOne({_id: noteId});
+      const note = await Note.findOne({ _id: noteId });
       return { ...note._doc };
     } catch (err) {
-      throw err;
+      errorHandler(err);
     }
   },
 
-  addNote: async ({content, userId}) => {
+  addNote: async ({ content, userId }, req) => {
     const noteContent = new Note({
       title: content.title,
       textBody: content.textBody,
-      createdBy: userId
+      createdBy: userId,
     });
+
+    if (!req.decodedToken) {
+      errorHandler(responseStatus.forbiddenAccess);
+    }
 
     try {
       const newNote = await noteContent.save();
       const user = await User.findById(userId);
       if (!user) {
-        throw new Error("User not found.");
+        errorHandler(responseStatus.notFound);
       }
       user.createdNotes.push(newNote);
-      await user.save()
+      await user.save();
 
       return { ...newNote._doc };
     } catch (err) {
-      throw err;
+      errorHandler(err);
     }
   },
-
 };
