@@ -22,7 +22,7 @@ export const SingleView = (props) => {
 						onClick={(event) => {
 							event.preventDefault();
 							props.toggleMode("list");
-							props.history.push("/");
+							props.history.push("/notes");
 						}}
 						component="form"
 					>

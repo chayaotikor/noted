@@ -273,13 +273,13 @@ export const Button = styled.button`
 	font-family: 'Montserrat', sans-serif;
 	text-decoration: none;
 	font-size: 1.6rem;
-	color: white;
+	color: ${props => props.auth ? "#4c132c": "#FFF"};
 	padding: 2.5%;
-	margin: 2.5% 1%;
+	margin: ${props => props.auth ? "2.5% 0 0": "2.5% 1%"};
 	border: none;
 	border-radius: 10px;
 	width: 200px;
-	background: #4c132c;
+	background: ${props => props.auth ? '#FFF': '#4c132c'};
 	font-weight: bold;
 	text-align: center;
 	:hover {
@@ -316,3 +316,41 @@ export const DeleteButton = styled.button`
 		}
 	}
 `;
+
+export const AuthForm = styled.form`
+	justify-content: space-around;
+	background-color: #4C132C;
+	align-items: center;
+	display: flex;
+	padding: 2.5%;
+	flex-flow: column nowrap;
+	width: 50vw;
+	max-width: 600px;
+	border: 2px solid white;
+	border-radius: 10px;
+	height: 100%;
+	max-height: 250px;
+`
+
+export const AuthFormHeading = styled.h1`
+font-family: "Dancing Script", cursive;
+	font-size: 3rem
+	color: #FFF;
+	text-align: center;
+	font-weight: bold;
+`
+
+export const AuthFormInput = styled.input`
+width:100%;
+font-family: 'Montserrat', sans-serif;
+border-radius: 10px;
+border: 2px dashed #4c132c;
+padding: 2.5%;
+`
+
+export const AuthFormActions = styled.div`
+display: flex;
+flew-flow: row nowrap;
+justify-content: space-around;
+width: 100%;
+`

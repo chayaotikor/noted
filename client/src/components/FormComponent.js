@@ -49,7 +49,7 @@ class FormComponent extends Component {
 				onSubmit={(event) => {
 					event.preventDefault();
 					this.handleMode();
-					this.props.history.push("/");
+					this.props.history.push("/notes");
 				}}
 			>
 				<H1>{this.props.header}</H1>
@@ -80,7 +80,7 @@ class FormComponent extends Component {
 								this.props.history.push(`/notes/${this.props.id}`);
 							} else {
 								this.props.toggleMode("list");
-								this.props.history.push(`/`);
+								this.props.history.push(`/notes`);
 							}
 						}}
 						component="form"

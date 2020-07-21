@@ -1,23 +1,25 @@
 import React, { Component } from "react";
 import {
-	GlobalStyle,
-	AppContainer,
-	AppHeader,
-	SortH2,
-	SearchContainer,
-	SearchInput,
-	SortContainer,
+  GlobalStyle,
+  AppContainer,
+  AppHeader,
+  SortH2,
+  SearchContainer,
+  SearchInput,
+  SortContainer,
 } from "./style";
-import { Route } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import {
-	requestNotes,
-	addNote,
-	editNote,
-	deleteNote,
-	sortAscending,
-	sortDescending,
-	searching,
+  login,
+  register,
+  requestNotes,
+  addNote,
+  editNote,
+  deleteNote,
+  sortAscending,
+  sortDescending,
+  searching,
 } from "./actions";
 //Views
 import { ListView } from "./views/ListView";
@@ -26,73 +28,82 @@ import { ListView } from "./views/ListView";
 import { NoteComponent } from "./components/NoteComponent";
 import { DeleteModal } from "./components/DeleteModal";
 import FormComponent from "./components/FormComponent";
+import Authentication from "./components/Authentication";
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			mode: "list",
-			searchTerm: "",
-		};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      mode: "list",
+      searchTerm: "",
+    };
+  }
 
-	componentDidMount() {
-		this.props.requestNotes();
-		// console.log("requesting....");
-	}
+  componentDidMount() {
+    this.props.requestNotes();
+    // console.log("requesting....");
+  }
 
-	//Search/Sort Methods
-	handleChange = (event) => {
-		event.preventDefault();
-		this.setState({
-			...this.state,
-			[event.target.name]: event.target.value,
-		});
-		if (event.target.value.length === 0) {
-			this.props.requestNotes();
-		}
-	};
+  //Search/Sort Methods
+  handleChange = (event) => {
+    event.preventDefault();
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.value,
+    });
+    if (event.target.value.length === 0) {
+      this.props.requestNotes();
+    }
+  };
 
-	sortAscending = () => {
-		this.props.sortAscending();
-	};
-	sortDescending = () => {
-		this.props.sortDescending();
-	};
+  sortAscending = () => {
+    this.props.sortAscending();
+  };
+  sortDescending = () => {
+    this.props.sortDescending();
+  };
 
-	search = (e) => {
-		e.preventDefault();
-		console.log(this.state.searchTerm);
-		this.props.searching(this.state.searchTerm);
-	};
+  search = (e) => {
+    e.preventDefault();
+    console.log(this.state.searchTerm);
+    this.props.searching(this.state.searchTerm);
+  };
 
-	//Note Methods
-	addNote = (note) => {
-		this.props.addNote(note);
-	};
+  //Auth
+  login = (credentials) => {
+	  this.props.login(credentials)
+  }
+  register = (credentials) => {
+	  this.props.register(credentials)
+  }
 
-	editNote = (note, id) => {
-		this.props.editNote(note, id);
-	};
+  //Note Methods
+  addNote = (note) => {
+    this.props.addNote(note);
+  };
 
-	deleteNote = (id) => {
-		this.props.deleteNote(id);
-	};
+  editNote = (note, id) => {
+    this.props.editNote(note, id);
+  };
 
-	toggleMode = (mode) => {
-		this.setState({
-			...this.state,
-			mode,
-		});
-	};
+  deleteNote = (id) => {
+    this.props.deleteNote(id);
+  };
 
-	render() {
-		return (
-			<>
-				<GlobalStyle />
-				<AppContainer mode={this.state.mode}>
-					<AppHeader mode={this.state.mode}>Noted</AppHeader>
-					<SearchContainer
+  toggleMode = (mode) => {
+    this.setState({
+      ...this.state,
+      mode,
+    });
+  };
+
+  render() {
+    return (
+      <>
+        <GlobalStyle />
+        <AppContainer mode={this.state.mode}>
+          <AppHeader mode={this.state.mode}>Noted</AppHeader>
+          {/* <SearchContainer
 						onSubmit={(event) => this.search(event)}
 						mode={this.state.mode}
 					>
@@ -106,101 +117,111 @@ class App extends Component {
 							<SortH2 onClick={this.sortAscending}>Sort A-Z</SortH2>
 							<SortH2 onClick={this.sortDescending}>Sort Z-A</SortH2>
 						</SortContainer>
-					</SearchContainer>
-					<Route
-						exact
-						path={"/notes/:id/edit"}
-						render={(props) => (
-							<FormComponent
-								{...props}
-								header={"Update Existing Note"}
-								mode={this.state.mode}
-								buttonText="Update"
-								toggleMode={this.toggleMode}
-								editNote={this.editNote}
-								match={this.props.match}
-								id={this.props.match.id}
-								history={this.props.history}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path={"/notes/:id/delete"}
-						render={(props) => (
-							<DeleteModal
-								{...props}
-								toggleMode={this.toggleMode}
-								deleteNote={this.deleteNote}
-								history={this.props.history}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path={"/notes/:id"}
-						render={(props) => (
-							<NoteComponent
-								{...props}
-								notes={this.props.notes}
-								toggleMode={this.toggleMode}
-								deleteNote={this.deleteNote}
-								editNote={this.editNote}
-								mode={this.state.mode}
-							/>
-						)}
-					/>
+					</SearchContainer> */}
+          <Switch>
+            <Redirect exact from="/" to="/auth" />
+            <Route
+              exact
+              path={"/auth"}
+              render={(props) => (<Authentication {...props} login={this.login} register={this.register}/>)}
+            />
+            <Route
+              exact
+              path={"/notes"}
+              render={(props) => (
+                <ListView
+                  setID={this.setID}
+                  notes={this.props.notes}
+                  mode={this.state.mode}
+                  toggleMode={this.toggleMode}
+                  addNote={this.addNote}
+                  id={this.props.match.params.id}
+                  handleChange={this.handleChange}
+                  sortAscending={this.sortAscending}
+                  sortDescending={this.sortDescending}
+                  search={this.search}
+                  history={this.props.history}
+                />
+              )}
+            />
+            <Route
+              exact
+              path={"/notes/:id/edit"}
+              render={(props) => (
+                <FormComponent
+                  {...props}
+                  header={"Update Existing Note"}
+                  mode={this.state.mode}
+                  buttonText="Update"
+                  toggleMode={this.toggleMode}
+                  editNote={this.editNote}
+                  match={this.props.match}
+                  id={this.props.match.id}
+                  history={this.props.history}
+                />
+              )}
+            />
+            <Route
+              exact
+              path={"/notes/:id/delete"}
+              render={(props) => (
+                <DeleteModal
+                  {...props}
+                  toggleMode={this.toggleMode}
+                  deleteNote={this.deleteNote}
+                  history={this.props.history}
+                />
+              )}
+            />
+            <Route
+              exact
+              path={"/notes/:id"}
+              render={(props) => (
+                <NoteComponent
+                  {...props}
+                  notes={this.props.notes}
+                  toggleMode={this.toggleMode}
+                  deleteNote={this.deleteNote}
+                  editNote={this.editNote}
+                  mode={this.state.mode}
+                />
+              )}
+            />
 
-					<Route
-						path={"/form/create"}
-						render={(props) => (
-							<FormComponent
-								header={"Create New Note"}
-								mode={this.state.mode}
-								toggleMode={this.toggleMode}
-								buttonText="Save"
-								addNote={this.addNote}
-								id={this.props.match.params.id}
-								history={this.props.history}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path={"/"}
-						render={(props) => (
-							<ListView
-								setID={this.setID}
-								notes={this.props.notes}
-								mode={this.state.mode}
-								toggleMode={this.toggleMode}
-								addNote={this.addNote}
-								id={this.props.match.params.id}
-								handleChange={this.handleChange}
-								sortAscending={this.sortAscending}
-								sortDescending={this.sortDescending}
-								search={this.search}
-								history={this.props.history}
-							/>
-						)}
-					/>
-				</AppContainer>
-			</>
-		);
-	}
+            <Route
+              path={"/form/create"}
+              render={(props) => (
+                <FormComponent
+                  header={"Create New Note"}
+                  mode={this.state.mode}
+                  toggleMode={this.toggleMode}
+                  buttonText="Save"
+                  addNote={this.addNote}
+                  id={this.props.match.params.id}
+                  history={this.props.history}
+                />
+              )}
+            />
+          </Switch>
+        </AppContainer>
+      </>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
-	notes: state.notes,
-	requestingData: state.requestingData,
-	newId: state.newId,
+  notes: state.notes,
+  requestingData: state.requestingData,
+  newId: state.newId,
 });
 export default connect(mapStateToProps, {
-	requestNotes,
-	addNote,
-	editNote,
-	deleteNote,
-	sortAscending,
-	sortDescending,
-	searching,
+  login,
+  register,
+  requestNotes,
+  addNote,
+  editNote,
+  deleteNote,
+  sortAscending,
+  sortDescending,
+  searching,
 })(App);
