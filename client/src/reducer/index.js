@@ -1,6 +1,4 @@
 import {
-	LOGIN,
-	REGISTER,
 	REQUEST_SENT,
 	REQUEST_ERROR,
 	REQUEST_SUCCESS,
@@ -18,7 +16,6 @@ const initialState = {
 	requestingData: false,
 	newId: "",
 	newNote: [],
-	user: {}
 };
 
 export const reducer = (state = initialState, action) => {
@@ -41,20 +38,6 @@ export const reducer = (state = initialState, action) => {
 				requestingData: false,
 				notes: action.payload
 			};
-			case LOGIN: 
-			return {
-				...state,
-				error: null,
-				requestingData: false,
-				user: action.payload
-			}
-			case REGISTER: 
-			return {
-				...state,
-				error: null,
-				requestingData: false,
-				user: action.payload
-			}
 		case ADD:
 			return {
 				...state,

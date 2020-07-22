@@ -30,7 +30,7 @@ class Authentication extends Component {
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = () => {
     if (this.state.mode === 'login') {
       this.props.login(this.state.credentials);
     }
@@ -73,8 +73,8 @@ class Authentication extends Component {
         ></AuthFormInput>
         <AuthFormActions>
           <Button
-            auth
           type='submit'
+            auth
           >
             Submit
           </Button>

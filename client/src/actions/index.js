@@ -1,4 +1,5 @@
 import axios from "axios";
+import {useHistory} from 'react-router-dom'
 export const REGISTER = "REGISTER";
 export const LOGIN = "LOGIN";
 export const REQUEST_SENT = "REQUEST_SENT";
@@ -10,6 +11,8 @@ export const DELETE = "DELETE";
 export const SORTASC = "SORTASC";
 export const SORTDSC = "SORTDSC";
 export const SEARCH = "SEARCH";
+
+
 
 export const login = ({ email, password }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
@@ -65,17 +68,38 @@ export const register = ({ email, password }) => (dispatch) => {
 	  });
   };
 
-export const requestNotes = (token) => (dispatch) => {
+export const requestNotes = () => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      authorization: token,
+      authorization: localStorage.getItem('TOKEN'),
     },
+    data: {
+      query: `
+      {
+        getAllNotes {
+          createdBy {
+            _id
+            email
+            createdNotes {
+              title
+              textBody
+              updatedAt
+              createdBy {
+                email
+              }
+            }
+          }
+        }
+      }
+      `
+    }
   })
     .then((response) => {
-      dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
+      console.log(response.data.data)
+      dispatch({ type: REQUEST_SUCCESS, payload: response.data.data.notes });
     })
     .catch((err) => {
       dispatch({ type: REQUEST_ERROR, err });
