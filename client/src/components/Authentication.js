@@ -30,13 +30,22 @@ class Authentication extends Component {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     if (this.state.mode === 'login') {
       this.props.login(this.state.credentials);
     }
     if (this.state.mode === 'register') {
       this.props.register(this.state.credentials)
     }
+    
+    setTimeout(()=>{
+      if(localStorage.getItem('TOKEN') !== null){
+        this.props.history.push('/notes')
+      } else {
+        this.props.history.push('/auth')
+      }
+    }, 3000)
   };
 
   toggleAuthMode = () => {
@@ -55,7 +64,7 @@ class Authentication extends Component {
 
   render() {
     return (
-      <AuthForm onSubmit={e => {e.preventDefault(); this.handleSubmit()}}>
+      <AuthForm onSubmit={e => { this.handleSubmit(e)}}>
         <AuthFormHeading>
           {this.state.mode === "register" ? "Sign Up" : "Sign In"}
         </AuthFormHeading>

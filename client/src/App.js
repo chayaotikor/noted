@@ -78,7 +78,7 @@ class App extends Component {
   //Auth
   login = (credentials) => {
     this.props.login(credentials);
-    this.props.history.push('/')
+
   };
   register = (credentials) => {
     this.props.register(credentials);
@@ -146,7 +146,7 @@ class App extends Component {
             >
               Logout
             </button>
-            {/* <SearchContainer
+            <SearchContainer
 						onSubmit={(event) => this.search(event)}
 						mode={this.state.mode}
 					>
@@ -160,10 +160,8 @@ class App extends Component {
 							<SortH2 onClick={this.sortAscending}>Sort A-Z</SortH2>
 							<SortH2 onClick={this.sortDescending}>Sort Z-A</SortH2>
 						</SortContainer>
-					</SearchContainer> */}
+					</SearchContainer>
             <Switch>
-            <Redirect exact from='/' exact to='/notes' />
-            <Redirect exact from='/auth' exact to='/notes' />
               <Route
                 exact
                 path={"/notes"}
