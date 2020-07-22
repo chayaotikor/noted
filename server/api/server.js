@@ -8,7 +8,7 @@ const {rootResolver} = require('../data/resolvers')
 const server = express();
 
 configureMiddleware(server);
-server.use(protected)
+// server.use(protected)
 
 server.use(
   "/graphql",

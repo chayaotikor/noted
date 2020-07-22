@@ -12,7 +12,7 @@ module.exports = {
         email: user.credentials.email,
       });
       if (previousUser) {
-        errorHandler(responseStatus.conflict);
+       errorHandler(responseStatus.conflict);
       }
 
       const hashed = await bcrypt.hash(user.credentials.password, 14);
@@ -26,14 +26,14 @@ module.exports = {
 
       return { ...newUser._doc, token, tokenExpiration: 1 };
     } catch (err) {
-      errorHandler(err);
+     errorHandler(err);
     }
   },
   login: async ({ email, password }) => {
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
-        errorHandler(responseStatus.badCredentials);
+       errorHandler(responseStatus.badCredentials);
       }
       const correctCreds = await bcrypt.compareSync(password, user.password);
 
@@ -44,7 +44,7 @@ module.exports = {
 
       return { ...user._doc, token, tokenExpiration: 1 };
     } catch (err) {
-      errorHandler(err);
+     errorHandler(err);
     }
   },
 };

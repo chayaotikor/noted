@@ -74,7 +74,7 @@ export const requestNotes = () => (dispatch) => {
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      authorization: localStorage.getItem('TOKEN'),
+      Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
     },
     data: {
       query: `

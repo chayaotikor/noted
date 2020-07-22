@@ -44,13 +44,7 @@ class App extends Component {
       },
     };
   }
-
-  componentDidMount() {
-    this.props.requestNotes();
-    // console.log("requesting....");
-  }
-
-  //Search/Sort Methods
+  //Search&Sort Methods
   handleChange = (event) => {
     event.preventDefault();
     this.setState({
@@ -91,6 +85,9 @@ class App extends Component {
   };
 
   //Note Methods
+  requestNotes = () =>{
+      this.props.requestNotes();
+  }
   addNote = (note) => {
     this.props.addNote(note);
   };
@@ -167,6 +164,7 @@ class App extends Component {
                 path={"/notes"}
                 render={(props) => (
                   <ListView
+                    requestNotes={this.requestNotes}
                     setID={this.setID}
                     notes={this.props.notes}
                     mode={this.state.mode}
@@ -181,7 +179,6 @@ class App extends Component {
                   />
                 )}
               />
-
               <Route
                 exact
                 path={"/notes/:id/edit"}

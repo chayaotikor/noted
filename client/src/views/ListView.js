@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
 	NoteContainer,
 	H2,
@@ -10,6 +10,11 @@ import {
 import { Link } from "react-router-dom";
 
 export const ListView = (props) => {
+	useEffect(() => {
+		if(localStorage.getItem('TOKEN') !== null){
+		  props.requestNotes();
+		}
+		}, [])
 		return (
 			<>
 				<NoteListSection>

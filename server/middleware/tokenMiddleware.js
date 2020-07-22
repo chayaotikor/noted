@@ -7,18 +7,14 @@ const errorHandler = require("../config/errorHandler");
 
 module.exports = {
 	protected: (req, res, next) => {
-		const token = req.headers.authorization;
-		if (token) {
-			jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-				if (err) {
-					errorHandler(responseStatus.badCredentials);
-				} else {
-					req.decodedToken = decodedToken;
-					next();
-				}
-			});
-		} 
-		next()
+		try{
+			const token = req.headers.authorization;
+			const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+			req.decodedToken = decodedToken
+			next();
+		} catch {
+			errorHandler(responseStatus.conflict);
+		}
 	},
 
 	generateToken: (user) => {

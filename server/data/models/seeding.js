@@ -8,7 +8,7 @@ const seedingFunction = () => {
     const seedNote = new Note({
       title: faker.random.word(),
       textBody: faker.hacker.phrase(),
-      createdBy: "5f10ceaef64f4a5500f29b43",
+      createdBy: "5f18ada4bbc4c71dac5f921d",
     });
 
     let createdSeed;
@@ -17,7 +17,7 @@ const seedingFunction = () => {
       .save()
       .then((res) => {
         createdSeed = res._doc;
-        return User.findById("5f10ceaef64f4a5500f29b43");
+        return User.findById("5f18ada4bbc4c71dac5f921d");
       })
       .then((user) => {
         if (!user) {

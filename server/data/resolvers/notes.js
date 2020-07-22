@@ -6,7 +6,6 @@ const responseStatus = require("../../config/responseStatuses");
 
 module.exports = {
   getAllNotes: async (args, req) => {
-
     if (!req.decodedToken) {
       errorHandler(responseStatus.forbiddenAccess);
     }

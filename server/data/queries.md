@@ -17,7 +17,7 @@
 
 
 # mutation {
-#   register(credentials: {email:"newer5@email.com", password:"newpass"}){
+#   register(credentials: {email:"admin@email.com", password:"password"}){
 #     _id
 #     email
 #     token

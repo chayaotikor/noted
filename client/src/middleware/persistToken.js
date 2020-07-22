@@ -12,6 +12,8 @@ export const persistToken = store => next => action => {
         localStorage.setItem('ID', action.payload._id)
         localStorage.setItem('EXP', action.payload.tokenExpiration)
         break;
+    default:
+    break
     }
   
     return next(action);
