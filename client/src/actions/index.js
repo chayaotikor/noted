@@ -36,8 +36,12 @@ export const login = ({ email, password }) => (dispatch) => {
       dispatch({ type: LOGIN, payload: response.data.data.login });
     })
     .catch((err) => {
-		console.log(err)
-      dispatch({ type: REQUEST_ERROR, payload: err });
+      if(err.response){
+        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      }
+      else {
+        dispatch({ type: REQUEST_ERROR, payload: err});
+      }
     });
 };
 
@@ -63,9 +67,12 @@ export const register = ({ email, password }) => (dispatch) => {
 		dispatch({ type: REGISTER, payload: response.data.data.register });
 	  })
 	  .catch((err) => {
-		  console.log(err)
-		dispatch({ type: REQUEST_ERROR, payload: err });
-	  });
+      if(err.response){
+        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      }
+      else {
+        dispatch({ type: REQUEST_ERROR, payload: err});
+      }	  });
   };
 
 export const requestNotes = () => (dispatch) => {
@@ -74,82 +81,140 @@ export const requestNotes = () => (dispatch) => {
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
+      Authorization: `${localStorage.getItem('TOKEN')}`,
     },
     data: {
       query: `
       {
         getAllNotes {
-          createdBy {
-            _id
-            email
-            createdNotes {
-              title
-              textBody
-              updatedAt
-              createdBy {
-                email
-              }
-            }
-          }
+          _id
+          title
+          textBody
+          updatedAt
         }
       }
       `
     }
   })
     .then((response) => {
-      console.log(response.data.data)
-      dispatch({ type: REQUEST_SUCCESS, payload: response.data.data.notes });
+      dispatch({ type: REQUEST_SUCCESS, payload: response.data.data.getAllNotes });
     })
     .catch((err) => {
-      dispatch({ type: REQUEST_ERROR, err });
+      if(err.response){
+        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      }
+      else {
+        dispatch({ type: REQUEST_ERROR, payload: err});
+      }
     });
 };
 
 export const addNote = (note) => (dispatch) => {
-  dispatch({ type: ADD });
-  axios
-    .post(`http://localhost:8000/graphql`, note)
+  dispatch({ type: REQUEST_SENT });
+  axios({
+    method: "post",
+    baseURL: "http://localhost:8000/graphql",
+    headers: {
+      Authorization: `${localStorage.getItem('TOKEN')}`,
+    },
+    data: {
+      query: `
+       mutation {
+        addNote(content: {title: "${note.title}", textBody: "${note.textBody}"}, userId: "${localStorage.getItem('ID')}" ){
+        _id
+        title
+        textBody
+        createdBy{
+          email
+        }
+        updatedAt
+        }
+    }
+      `
+    }
+  })
     .then((response) => {
-      dispatch({ type: ADD, id: response.data.success });
-      return axios.get(`http://localhost:8000/graphql`);
-    })
-    .then((response) => {
-      dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
+      console.log(response)
+      dispatch({ type: ADD, payload: response.data.data.addNote._id });
     })
     .catch((err) => {
-      dispatch({ type: REQUEST_ERROR, err });
+      if(err.response){
+        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      }
+      else {
+        dispatch({ type: REQUEST_ERROR, payload: err});
+      }
     });
+
 };
 
-export const editNote = (note, id) => (dispatch) => {
-  dispatch({ type: UPDATE });
-  console.log(note);
-  axios
-    .put(`http://localhost:8000/graphql/`, note)
+export const editNote = (note) => (dispatch) => {
+  dispatch({ type: REQUEST_SENT });
+  axios({
+    method: "post",
+    baseURL: "http://localhost:8000/graphql",
+    headers: {
+      Authorization: `${localStorage.getItem('TOKEN')}`,
+    },
+    data: {
+      query: `
+       mutation {
+        editNote(content: {title: "${note.title}", textBody: "${note.textBody}"}, noteId: "${note._id}" ){
+        _id
+        title
+        textBody
+        createdBy{
+          email
+        }
+        updatedAt
+        }
+    }
+      `
+    }
+  })
     .then((response) => {
-      return axios.get(`http://localhost:8000/graphql`);
-    })
-    .then((response) => {
-      dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
+      console.log(response)
+      dispatch({ type: UPDATE, payload: response.data.data.editNote });
     })
     .catch((err) => {
-      dispatch({ type: REQUEST_ERROR, err });
+      if(err.response){
+        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      }
+      else {
+        dispatch({ type: REQUEST_ERROR, payload: err});
+      }
     });
+
 };
 
-export const deleteNote = (id) => (dispatch) => {
-  dispatch({ type: DELETE });
-  axios
-    .delete(`http://localhost:8000/graphql/`)
+export const deleteNote = (noteId) => (dispatch) => {
+  console.log(noteId)
+  dispatch({ type: REQUEST_SENT });
+  axios({
+    method: "post",
+    baseURL: "http://localhost:8000/graphql",
+    headers: {
+      Authorization: `${localStorage.getItem('TOKEN')}`,
+    },
+    data: {
+      query: `
+      mutation {
+        deleteNote(noteId: "${noteId}", userId: "${localStorage.getItem('ID')}" )
+    }
+      `
+    }
+  })
     .then((response) => {
-      return axios.get(`http://localhost:8000/graphql`);
-    })
-    .then((response) => {
-      dispatch({ type: REQUEST_SUCCESS, payload: response.data.notes });
+      console.log(response)
+      dispatch({ type: DELETE, payload: response.data.data.deleteNote });
     })
     .catch((err) => {
-      dispatch({ type: REQUEST_ERROR, err });
+      if(err.response){
+        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      }
+      else {
+        dispatch({ type: REQUEST_ERROR, payload: err});
+      }
     });
 };
 

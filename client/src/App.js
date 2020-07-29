@@ -7,6 +7,7 @@ import {
   SearchContainer,
   SearchInput,
   SortContainer,
+  Button
 } from "./style";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -26,7 +27,6 @@ import { ListView } from "./views/ListView";
 
 //Components
 import { NoteComponent } from "./components/NoteComponent";
-import { DeleteModal } from "./components/DeleteModal";
 import FormComponent from "./components/FormComponent";
 import Authentication from "./components/Authentication";
 
@@ -36,13 +36,34 @@ class App extends Component {
     this.state = {
       mode: "list",
       searchTerm: "",
-      user: {
-        token: null,
-        _id: null,
-        email: null,
-        tokenExpiration: null,
-      },
+      loading: true,
+      modal: false,
+      deleteId: null
     };
+  }
+
+  //Loading
+  setLoading = (bool) => {
+    this.setState({
+      ...this.state,
+      loading: bool
+    })
+  }
+
+  //Modal
+  toggleModal = (bool) => {
+    console.log('bool', bool)
+    this.setState({
+      ...this.state,
+      modal: bool
+    })
+  }
+
+  setDeleteId = (id) => {
+    this.setState({
+      ...this.state,
+      deleteId: id
+    })
   }
   //Search&Sort Methods
   handleChange = (event) => {
@@ -96,8 +117,9 @@ class App extends Component {
     this.props.editNote(note, id);
   };
 
-  deleteNote = (id) => {
-    this.props.deleteNote(id);
+  deleteNote = () => {
+
+    this.props.deleteNote(this.state.deleteId);
   };
 
   toggleMode = (mode) => {
@@ -135,14 +157,7 @@ class App extends Component {
           <GlobalStyle />
           <AppContainer mode={this.state.mode}>
             <AppHeader mode={this.state.mode}>Noted</AppHeader>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                this.logout();
-              }}
-            >
-              Logout
-            </button>
+
             <SearchContainer
 						onSubmit={(event) => this.search(event)}
 						mode={this.state.mode}
@@ -175,7 +190,15 @@ class App extends Component {
                     sortAscending={this.sortAscending}
                     sortDescending={this.sortDescending}
                     search={this.search}
+                    toggleMode={this.toggleMode}
+                    deleteNote={this.deleteNote}
                     history={this.props.history}
+                    modal={this.state.modal}
+                    loading={this.state.loading}
+                    setLoading={this.setLoading}
+                    deleteId={this.state.deleteId}
+                    toggleModal={this.toggleModal}
+                    setDeleteId={this.setDeleteId}
                   />
                 )}
               />
@@ -192,19 +215,6 @@ class App extends Component {
                     editNote={this.editNote}
                     match={this.props.match}
                     id={this.props.match.id}
-                    history={this.props.history}
-                  />
-                )}
-              />
-
-              <Route
-                exact
-                path={"/notes/:id/delete"}
-                render={(props) => (
-                  <DeleteModal
-                    {...props}
-                    toggleMode={this.toggleMode}
-                    deleteNote={this.deleteNote}
                     history={this.props.history}
                   />
                 )}
@@ -240,6 +250,15 @@ class App extends Component {
                 )}
               />
             </Switch>
+            {/* <Button
+            auth
+              onClick={(e) => {
+                e.preventDefault();
+                this.logout();
+              }}
+            >
+              Logout
+            </Button> */}
           </AppContainer>
         </>
       );
@@ -249,9 +268,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   notes: state.notes,
-  requestingData: state.requestingData,
   newId: state.newId,
-  user: state.user,
 });
 export default connect(mapStateToProps, {
   login,

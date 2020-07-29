@@ -33,10 +33,12 @@ class FormComponent extends Component {
 	handleMode = () => {
 		if (this.props.mode === "create") {
 			this.props.toggleMode("list");
+			this.props.history.push(`/notes`);
 			return this.props.addNote(this.state.note);
 		} else if (this.props.mode === "edit") {
 			this.props.toggleMode("list");
-			return this.props.editNote(this.state.note, this.props.id);
+			this.props.history.push(`/notes`);
+			return this.props.editNote(this.state.note);
 		} else {
 			this.props.toggleMode("list");
 			return null;
@@ -49,7 +51,6 @@ class FormComponent extends Component {
 				onSubmit={(event) => {
 					event.preventDefault();
 					this.handleMode();
-					this.props.history.push("/notes");
 				}}
 			>
 				<H1>{this.props.header}</H1>

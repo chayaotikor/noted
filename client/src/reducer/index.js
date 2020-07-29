@@ -13,9 +13,9 @@ import {
 const initialState = {
 	notes: [],
 	error: null,
-	requestingData: false,
 	newId: "",
 	newNote: [],
+	message: null
 };
 
 export const reducer = (state = initialState, action) => {
@@ -23,42 +23,42 @@ export const reducer = (state = initialState, action) => {
 		case REQUEST_SENT:
 			return {
 				...state,
-				requestingData: true
+				message: null
 			};
 		case REQUEST_ERROR:
 			return {
 				...state,
-				requestingData: false,
-				error: action.payload
+				error: action.payload,
+				message: null
 			};
 		case REQUEST_SUCCESS:
 			return {
 				...state,
 				error: null,
-				requestingData: false,
-				notes: action.payload
+				notes: action.payload,
+				message: null
 			};
 		case ADD:
 			return {
 				...state,
-				error: null,
-				requestingData: false,
+				error: null,		
 				newId: action.id,
-				notes: [...state.notes]
+				notes: [...state.notes],
+				message: 'Note added successfully.'
 			};
 		case UPDATE:
 			return {
 				...state,
-				error: null,
-				requestingData: false,
-				notes: [...state.notes]
+				error: null,		
+				notes: [...state.notes],
+				message: 'Note updated successfully.'
 			};
 		case DELETE:
 			return {
 				...state,
-				error: null,
-				requestingData: false,
-				notes: [...state.notes]
+				error: null,		
+				notes: [...state.notes],
+				message: action.payload
 			};
 		case SORTASC:
 			return {

@@ -4,7 +4,7 @@ import { H2, P, ButtonContainer, Button, NoteForm } from "../style";
 export const SingleView = (props) => {
 
 	return props.notes.map((note, index) =>
-		note.id.toString() === props.id ? (
+		note._id.toString() === props.id ? (
 			<NoteForm key={index}>
 				<H2 component="single">{note.title}</H2>
 				<P component="single">{note.textBody}</P>

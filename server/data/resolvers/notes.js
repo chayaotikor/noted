@@ -6,10 +6,6 @@ const responseStatus = require("../../config/responseStatuses");
 
 module.exports = {
   getAllNotes: async (args, req) => {
-    if (!req.decodedToken) {
-      errorHandler(responseStatus.forbiddenAccess);
-    }
-    // seedingFunction()
     try {
       const notes = await Note.find();
       return notes.map((note) => {
@@ -21,15 +17,7 @@ module.exports = {
   },
 
   getNote: async ({ noteId }, req) => {
-    if (!req.decodedToken) {
-      errorHandler(responseStatus.forbiddenAccess);
-    }
-    try {
-      const note = await Note.findOne({ _id: noteId });
-      return { ...note._doc };
-    } catch (err) {
-      errorHandler(err);
-    }
+
   },
 
   addNote: async ({ content, userId }, req) => {
@@ -38,16 +26,11 @@ module.exports = {
       textBody: content.textBody,
       createdBy: userId,
     });
-
-    if (!req.decodedToken) {
-      errorHandler(responseStatus.forbiddenAccess);
-    }
-
     try {
       const newNote = await noteContent.save();
       const user = await User.findById(userId);
       if (!user) {
-        errorHandler(responseStatus.notFound);
+        errorHandler(responseStatus.userNotFound);
       }
       user.createdNotes.push(newNote);
       await user.save();
@@ -57,4 +40,44 @@ module.exports = {
       errorHandler(err);
     }
   },
+
+  editNote: async ({content, noteId}) => {
+    try {
+      const note = await Note.findOne({ _id: noteId });
+      if(!note){
+        errorHandler(responseStatus.noteNotFound);
+      } else {
+        if(content.title){
+          note.title = content.title
+        }
+        if(content.textBody){
+          note.textBody = content.textBody
+        }
+        note.save()
+        return { ...note._doc };
+      }
+    } catch (err) {
+      errorHandler(err);
+    }
+  },
+
+  deleteNote: async ({noteId, userId}) => {
+    try {
+      const note = await Note.findOne({ _id: noteId });
+      const user = await User.findById(userId);
+
+      if(!note){
+        errorHandler(responseStatus.noteNotFound);
+      } else if(!user) {
+        errorHandler(responseStatus.userNotFound);
+      } else {
+        note.remove()
+        user.save()
+        return "Note deleted successfully."
+      }
+    } catch (err) {
+      errorHandler(err);
+    }
+  }
+
 };

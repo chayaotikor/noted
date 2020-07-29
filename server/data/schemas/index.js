@@ -9,9 +9,14 @@ module.exports = buildSchema(`
      updatedAt: String!
  }
 
- input NoteInput {
+ input CreateInput {
      title: String!
      textBody: String!
+ }
+
+ input UpdateInput {
+    title: String
+    textBody: String
  }
 
  type User {
@@ -41,8 +46,10 @@ module.exports = buildSchema(`
  }
 
  type RootMutation {
-     addNote(content: NoteInput, userId: ID!): Note
      register(credentials: UserInput): User
+     addNote(content: CreateInput, userId: ID!): Note
+     editNote(content: UpdateInput, noteId: ID!): Note
+     deleteNote(noteId: ID!, userId: ID!): String
  }
 
  schema {

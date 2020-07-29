@@ -1,6 +1,8 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import reset from "styled-reset";
 import xIcon from "./x-icon.png";
+import { Link } from "react-router-dom";
+
 // font-family: 'Dancing Script', cursive;
 
 // font-family: 'Montserrat', sans-serif;
@@ -50,6 +52,15 @@ export const pulse = keyframes`
 100% { transform: scale(1)}
 `;
 
+export const spin = keyframes`
+	0% {
+	  transform: rotate(0deg);
+	}
+	100% {
+	  transform: rotate(360deg);
+	}
+  `
+
 //Main Containers
 export const AppContainer = styled.main`
 	background: #ffaf9c;
@@ -86,20 +97,30 @@ export const AppHeader = styled.h1`
 export const ModalDiv = styled.div`
 	z-index: 10;
 	opacity: 1;
+	border: 1px solid white;
 	border-radius: 10px;
-	width: 100wv;
-	display: flex;
-	margin: 2.5%;
+	background: #ffaf9c;
+	width: 90%;
+	max-width: 400px;
+	margin: 0;
 	padding: 2.5% 0;
+	display: ${props => 
+		props.modal ? 'flex' : 'none'};
 	justify-content: space-around;
 	align-items: center;
 	flex-flow: column wrap;
+	position: absolute;
+	-webkit-box-shadow: 0px 0px 300px 200px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 300px 200px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 300px 200px rgba(0,0,0,0.75);
+
 `;
 
 export const NoteListSection = styled.section`
-	background: #ffeade;
+	background: #FFF;
 	width: 100%;
 	max-height: 65vh;
+	min-height: 20vh;
 	display: flex;
 	padding: 2.5%;
 	overflow-y: scroll;
@@ -111,22 +132,57 @@ export const NoteListSection = styled.section`
 	box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
 `;
 
-export const NoteContainer = styled.section`
+export const NoteContainer = styled.div`
+display:flex;
+flex-flow: column nowrap;
+width: 100px;
+height: 100px;
+align-items: flex-end;
+background: #4c132c;
+flex-flow: column nowrap;
+align-items: center;
+position: relative;
+justify-content: stretch;
+position: relative;
+border-radius: 10%;
+margin: 2.5% 0;
+`
+export const DeleteButton = styled.button`
+	width: 50%;
+	z-index: 100;
+	font-size: 1.6rem;
+	position: absolute;
+	border: none;
+	border-radius: 50%;
+	top: 0;
+	right: 0;
+	margin: 1rem;
+	height: 1.6rem;
+	width: 1.6rem;
+	background: none;
+	background-color: #4c132c;
+	background-image: url(${xIcon});
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	:hover {
+		cursor: pointer;
+	}
+`;
+
+
+export const NoteLink = styled(Link)`
+	overflow: hidden;
+	z-index: 1;
+	text-decoration: none;
 	width: 100px;
 	height: 100px;
-	overflow: hidden;
 	display: flex;
-	background: #4c132c;
-	flex-flow: column nowrap;
 	align-items: center;
-	position: relative;
 	justify-content: center;
-	padding: 5%;
-	border-radius: 10%;
-	margin: 2.5% 0;
 	text-align: center;
 	color: #fff;
-
+	padding: 5%;
 	:hover {
 		animation: ${pulse} 1s infinite;
 		background: white;
@@ -297,25 +353,7 @@ export const Button = styled.button`
 	}
 `;
 
-export const DeleteButton = styled.button`
-	position: absolute;
-	right: 5px;
-	top: 5px;
-	background-color: #4c132c;
-	border: none;
-	border-radius: 50%;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-image: url(${xIcon});
-	height: 16px;
-	width: 16px;
-	cursor: pointer;
-	:hover {
-		50% {
-			transform: scale(1.1);
-		}
-	}
-`;
+
 
 export const AuthForm = styled.form`
 	justify-content: space-around;
@@ -353,4 +391,17 @@ display: flex;
 flew-flow: row nowrap;
 justify-content: space-around;
 width: 100%;
+`
+
+export const LoadingSpan = styled.span`
+position: absolute;
+  bottom: 25%;
+  left: calc(50% - 4em);
+  width: 6em;
+  height: 6em;
+  border: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-left: 1.1em solid #4c132c;
+  border-radius: 50%;
+  animation: ${spin} 1.1s infinite linear;
+  transition: opacity 0.3s;
 `
