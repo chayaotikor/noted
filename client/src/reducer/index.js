@@ -13,10 +13,12 @@ import {
   SETID,
   SETLOADING,
   GETNOTE,
+  LOGOUT
 } from "../actions";
 
 const initialState = {
   notes: [],
+  filteredNotes: null,
   error: null,
   newId: "",
   newNote: [],
@@ -96,13 +98,9 @@ export const reducer = (state = initialState, action) => {
       };
     case SEARCH:
       return {
-		...state,
-		loading: false,
-        notes: state.notes
-          .slice()
-          .filter((note) =>
-            note.title.toLowerCase().includes(action.payload.toLowerCase())
-          ),
+        ...state,
+        loading: false,
+        filteredNotes: action.payload,
       };
     case TOGGLEMODE:
       return {
@@ -116,8 +114,8 @@ export const reducer = (state = initialState, action) => {
       };
     case SETID:
       return {
-		...state,
-		loading: true,
+        ...state,
+        loading: true,
         currentNote: {
           ...state.currentNote,
           _id: action.payload,
@@ -128,6 +126,11 @@ export const reducer = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
+    case LOGOUT:
+      return {
+        ...state,
+        message: action.payload
+      }
 
     default:
       return state;

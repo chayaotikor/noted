@@ -6,8 +6,9 @@ import {
   SortH2,
   SearchContainer,
   SearchInput,
+  SettingsButton,
   SortContainer,
-  Button
+  LogoutButton,
 } from "./style";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -25,7 +26,8 @@ import {
   toggleMode,
   setId,
   setLoading,
-  getNote
+  getNote,
+  logout
 } from "./actions";
 //Views
 import { ListView } from "./views/ListView";
@@ -33,46 +35,32 @@ import { ListView } from "./views/ListView";
 //Components
 import { NoteComponent } from "./components/NoteComponent";
 import FormComponent from "./components/FormComponent";
+import SettingsView from "./views/SettingsView";
 import Authentication from "./components/Authentication";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      searchTerm: "",
-    };
   }
-  
 
   //Loading
   setLoading = (bool) => {
-    this.props.setLoading(bool)
-  }
+    this.props.setLoading(bool);
+  };
 
   //Toggle
   toggleModal = (bool) => {
-    this.props.toggleModal(bool)
-  }
-
-  toggleMode = (mode) => {
-    this.props.toggleMode(mode)
-  }
-
-  setId = (id) => {
-    this.props.setId(id)
-  }
-  //Search&Sort Methods
-  handleChange = async (event) => {
-    event.preventDefault();
-    this.setState({
-      ...this.state,
-      [event.target.name]: event.target.value,
-    });
-    if (event.target.value.length === 0) {
-      this.props.requestNotes();
-    }
+    this.props.toggleModal(bool);
   };
 
+  toggleMode = (mode) => {
+    this.props.toggleMode(mode);
+  };
+
+  setId = (id) => {
+    this.props.setId(id);
+  };
+  //Search&Sort Methods
   sortAscending = () => {
     this.props.sortAscending();
   };
@@ -82,33 +70,36 @@ class App extends Component {
 
   search = (e) => {
     e.preventDefault();
-    console.log(this.state.searchTerm);
-    this.props.searching(this.state.searchTerm);
+    const newList = this.props.notes.slice().filter((note) => {
+      return note.title.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    if (e.target.value !== "") {
+      this.props.searching(newList);
+    } else {
+      this.props.searching(null);
+    }
   };
 
   //Auth
   login = (credentials) => {
     this.props.login(credentials);
-
   };
   register = (credentials) => {
     this.props.register(credentials);
   };
   logout = () => {
-    localStorage.clear();
-    const token = localStorage.getItem("TOKEN");
-    console.log(token);
-    this.props.history.push("/auth");
+    const message = "Logged out successfully."
+    this.props.logout(message)
   };
 
   //Note Methods
-  requestNotes = () =>{
-      this.props.requestNotes();
-  }
+  requestNotes = () => {
+    this.props.requestNotes();
+  };
 
   getNote = (id) => {
-    this.props.getNote(id)
-  }
+    this.props.getNote(id);
+  };
   addNote = (note) => {
     this.props.addNote(note);
   };
@@ -121,8 +112,6 @@ class App extends Component {
     this.props.deleteNote(this.props.noteId);
   };
 
-
-
   render() {
     if (localStorage.getItem("TOKEN") === null) {
       return (
@@ -130,7 +119,7 @@ class App extends Component {
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
             <AppHeader mode={this.props.mode}>Noted</AppHeader>
-            <Redirect exact from='/' exact to='/auth' />
+            <Redirect exact from="/" exact to="/auth" />
             <Route
               exact
               path={"/auth"}
@@ -150,23 +139,29 @@ class App extends Component {
         <>
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
+          <LogoutButton
+            to="/auth"
+              onClick={() => {
+                this.logout();
+              }}
+            >
+              Logout
+            </LogoutButton>
+            <SettingsButton to='/settings' onClick={() => {
+                this.toggleMode('settings');
+              }} />
             <AppHeader mode={this.props.mode}>Noted</AppHeader>
-
-            <SearchContainer
-						onSubmit={(event) => this.search(event)}
-						mode={this.props.mode}
-					>
-						<SearchInput
-							name="searchTerm"
-							onChange={(e) => this.handleChange(e)}
-							placeholder={"search notes..."}
-							type="text"
-						/>
-						<SortContainer>
-							<SortH2 onClick={this.sortAscending}>Sort A-Z</SortH2>
-							<SortH2 onClick={this.sortDescending}>Sort Z-A</SortH2>
-						</SortContainer>
-					</SearchContainer>
+            <SearchContainer mode={this.props.mode}>
+              <SearchInput
+                onChange={(e) => this.search(e)}
+                placeholder={"search notes..."}
+                type="text"
+              />
+              <SortContainer>
+                <SortH2 onClick={this.sortAscending}>Sort A-Z</SortH2>
+                <SortH2 onClick={this.sortDescending}>Sort Z-A</SortH2>
+              </SortContainer>
+            </SearchContainer>
             <Switch>
               <Route
                 exact
@@ -174,7 +169,7 @@ class App extends Component {
                 render={(props) => (
                   <ListView
                     requestNotes={this.requestNotes}
-                    notes={this.props.notes}
+                    notes={this.props.filteredNotes ? this.props.filteredNotes : this.props.notes }
                     mode={this.props.mode}
                     toggleMode={this.toggleMode}
                     addNote={this.addNote}
@@ -252,16 +247,17 @@ class App extends Component {
                   />
                 )}
               />
+              <Route
+                path={"/settings"}
+                render={(props) => (
+                  <SettingsView
+                    mode={this.props.mode}
+                    toggleMode={this.toggleMode}
+                  />
+                )}
+              />
             </Switch>
-            {/* <Button
-            auth
-              onClick={(e) => {
-                e.preventDefault();
-                this.logout();
-              }}
-            >
-              Logout
-            </Button> */}
+
           </AppContainer>
         </>
       );
@@ -278,10 +274,12 @@ const mapStateToProps = (state) => ({
   title: state.currentNote.title,
   textBody: state.currentNote.textBody,
   loading: state.loading,
-  note: state.currentNote
+  note: state.currentNote,
+  filteredNotes: state.filteredNotes
 });
 export default connect(mapStateToProps, {
   login,
+  logout,
   register,
   requestNotes,
   addNote,
@@ -294,5 +292,5 @@ export default connect(mapStateToProps, {
   toggleMode,
   setId,
   setLoading,
-  getNote
+  getNote,
 })(App);
