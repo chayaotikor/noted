@@ -309,12 +309,8 @@ export const sortDescending = () => (dispatch) => {
   dispatch({ type: SORTDSC, payload: compare });
 };
 
-export const searching = (searchTerm) => (dispatch) => {
-  if (searchTerm === "") {
-    requestNotes();
-  } else {
-    dispatch({ type: SEARCH, payload: searchTerm });
-  }
+export const searching = (list) => (dispatch) => {
+  dispatch({ type: SEARCH, payload: list });
 };
 
 export const toggleMode = (mode) => (dispatch) => {
