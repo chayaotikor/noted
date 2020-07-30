@@ -1,56 +1,103 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
-	NoteContainer,
-	H2,
-	NoteListSection,
-	Button,
-	DeleteButton,
-	ButtonContainer,
+  NoteContainer,
+  NoteLink,
+  H2,
+  NoteListSection,
+  Button,
+  DeleteButton,
+  ButtonContainer,
+  LoadingSpan,
+  ModalDiv,
+  H1,
 } from "../style";
-import { Link } from "react-router-dom";
 
-export const ListView = (props) => {
-	useEffect(() => {
-		if(localStorage.getItem('TOKEN') !== null){
-		  props.requestNotes();
-		}
-		}, [])
-		return (
-			<>
-				<NoteListSection>
-					{props.notes.map((note, index) => (
-						<Link
-							to={`/notes/${note.id}`}
-							key={index}
-							style={{ textDecoration: "none" }}
-							onClick={(event) => {
-								props.toggleMode("single");
-							}}
-						>
-							<NoteContainer>
-								<H2 component="list">{note.title}</H2>
-								<DeleteButton
-									onClick={(event) => {
-										event.preventDefault();
-										props.toggleMode("delete");
-										props.history.push(`/notes/${note.id}/delete`);
-									}}
-								/>
-							</NoteContainer>
-						</Link>
-					))}
-				</NoteListSection>
-				<ButtonContainer>
-					<Button
-						onClick={(event) => {
-							event.preventDefault();
-							props.toggleMode("create");
-							props.history.push("/form/create");
-						}}
-					>
-						+ Create New Note
-				</Button>
-				</ButtonContainer>
-			</>
-		);
+export const ListView = ({
+  notes,
+  toggleMode,
+  requestNotes,
+  history,
+  loading,
+  setLoading,
+  modal,
+  deleteNote,
+  toggleModal,
+  setId,
+  noteId,
+}) => {
+  useEffect(() => {
+    if (localStorage.getItem("TOKEN") !== null) {
+      requestNotes();
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, []);
+
+  if (loading) {
+    return <LoadingSpan />;
+  } else {
+    return (
+      <>
+        {notes ? (
+          <NoteListSection>
+            {notes.map((note, index) => (
+              <NoteContainer key={index}>
+                  <DeleteButton
+                    onClick={(event) => {
+                      toggleModal(true);
+                      setId(note._id);
+                      setLoading(false)
+                    }}
+                  />
+                <NoteLink 
+                to={`/notes/${note._id}`}
+                onClick={(e) => {
+                  toggleMode("single");
+                  setId(note._id);
+                }}>
+                  <H2 component="list">{note.title}</H2>
+                </NoteLink>
+                </NoteContainer>
+            ))}
+          </NoteListSection>
+        ) : (
+          <h1>No notes, create a new one</h1>
+        )}
+        <ButtonContainer>
+          <Button
+            onClick={(event) => {
+              event.preventDefault();
+              toggleMode("create");
+              history.push("/form/create");
+            }}
+          >
+            + Create New Note
+          </Button>
+        </ButtonContainer>
+        <ModalDiv modal={modal}>
+          <H1 component="delete">Confirm Delete Note</H1>
+          <Button
+            onClick={(event) => {
+              event.preventDefault();
+              toggleMode("list");
+              toggleModal(false);
+              deleteNote(noteId);
+            }}
+          >
+            Delete
+          </Button>
+          <Button
+            onClick={(event) => {
+              event.preventDefault();
+              toggleMode("list");
+              toggleModal(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </ModalDiv>
+      </>
+    );
+  }
 };
