@@ -12,17 +12,22 @@ export const NoteComponent = (props) => {
 				buttonText="Update"
 				toggleMode={props.toggleMode}
 				editNote={props.editNote}
-				match={props.match}
 				id={id}
+				setLoading={props.setLoading}
 				history={props.history}
+				title={props.title}
+				textBody={props.textBody}
 			/>
 		);	
 	} else {
 		return (
 			<SingleView
-				notes={props.notes}
 				toggleMode={props.toggleMode}
 				component="single"
+				getNote={props.getNote}
+				setLoading={props.setLoading}
+				loading={props.loading}
+				note={props.note}
 				id={id}
 				history={props.history}
 			/>

@@ -19,19 +19,18 @@ export const ListView = ({
   history,
   loading,
   setLoading,
-  match,
   modal,
   deleteNote,
   toggleModal,
-  setDeleteId,
-  deleteId,
+  setId,
+  noteId,
 }) => {
   useEffect(() => {
     if (localStorage.getItem("TOKEN") !== null) {
       requestNotes();
       setTimeout(() => {
         setLoading(false);
-      }, 5000);
+      }, 2000);
     }
   }, []);
 
@@ -43,19 +42,19 @@ export const ListView = ({
         {notes ? (
           <NoteListSection>
             {notes.map((note, index) => (
-              <NoteContainer>
+              <NoteContainer key={index}>
                   <DeleteButton
                     onClick={(event) => {
-                      event.preventDefault();
                       toggleModal(true);
-                      setDeleteId(note._id);
+                      setId(note._id);
+                      setLoading(false)
                     }}
                   />
                 <NoteLink 
                 to={`/notes/${note._id}`}
-                key={index}
                 onClick={(e) => {
                   toggleMode("single");
+                  setId(note._id);
                 }}>
                   <H2 component="list">{note.title}</H2>
                 </NoteLink>
@@ -81,10 +80,9 @@ export const ListView = ({
           <Button
             onClick={(event) => {
               event.preventDefault();
-              deleteNote(deleteId);
-              setLoading(true);
               toggleMode("list");
               toggleModal(false);
+              deleteNote(noteId);
             }}
           >
             Delete

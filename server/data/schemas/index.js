@@ -49,7 +49,7 @@ module.exports = buildSchema(`
      register(credentials: UserInput): User
      addNote(content: CreateInput, userId: ID!): Note
      editNote(content: UpdateInput, noteId: ID!): Note
-     deleteNote(noteId: ID!, userId: ID!): String
+     deleteNote(noteId: ID!, userId: ID!): User
  }
 
  schema {

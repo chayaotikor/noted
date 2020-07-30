@@ -21,6 +21,11 @@ import {
   sortAscending,
   sortDescending,
   searching,
+  toggleModal,
+  toggleMode,
+  setId,
+  setLoading,
+  getNote
 } from "./actions";
 //Views
 import { ListView } from "./views/ListView";
@@ -34,39 +39,30 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: "list",
       searchTerm: "",
-      loading: true,
-      modal: false,
-      deleteId: null
     };
   }
+  
 
   //Loading
   setLoading = (bool) => {
-    this.setState({
-      ...this.state,
-      loading: bool
-    })
+    this.props.setLoading(bool)
   }
 
-  //Modal
+  //Toggle
   toggleModal = (bool) => {
-    console.log('bool', bool)
-    this.setState({
-      ...this.state,
-      modal: bool
-    })
+    this.props.toggleModal(bool)
   }
 
-  setDeleteId = (id) => {
-    this.setState({
-      ...this.state,
-      deleteId: id
-    })
+  toggleMode = (mode) => {
+    this.props.toggleMode(mode)
+  }
+
+  setId = (id) => {
+    this.props.setId(id)
   }
   //Search&Sort Methods
-  handleChange = (event) => {
+  handleChange = async (event) => {
     event.preventDefault();
     this.setState({
       ...this.state,
@@ -109,33 +105,31 @@ class App extends Component {
   requestNotes = () =>{
       this.props.requestNotes();
   }
+
+  getNote = (id) => {
+    this.props.getNote(id)
+  }
   addNote = (note) => {
     this.props.addNote(note);
   };
 
-  editNote = (note, id) => {
-    this.props.editNote(note, id);
+  editNote = (note) => {
+    this.props.editNote(note);
   };
 
   deleteNote = () => {
-
-    this.props.deleteNote(this.state.deleteId);
+    this.props.deleteNote(this.props.noteId);
   };
 
-  toggleMode = (mode) => {
-    this.setState({
-      ...this.state,
-      mode,
-    });
-  };
+
 
   render() {
     if (localStorage.getItem("TOKEN") === null) {
       return (
         <>
           <GlobalStyle />
-          <AppContainer mode={this.state.mode}>
-            <AppHeader mode={this.state.mode}>Noted</AppHeader>
+          <AppContainer mode={this.props.mode}>
+            <AppHeader mode={this.props.mode}>Noted</AppHeader>
             <Redirect exact from='/' exact to='/auth' />
             <Route
               exact
@@ -155,12 +149,12 @@ class App extends Component {
       return (
         <>
           <GlobalStyle />
-          <AppContainer mode={this.state.mode}>
-            <AppHeader mode={this.state.mode}>Noted</AppHeader>
+          <AppContainer mode={this.props.mode}>
+            <AppHeader mode={this.props.mode}>Noted</AppHeader>
 
             <SearchContainer
 						onSubmit={(event) => this.search(event)}
-						mode={this.state.mode}
+						mode={this.props.mode}
 					>
 						<SearchInput
 							name="searchTerm"
@@ -180,9 +174,8 @@ class App extends Component {
                 render={(props) => (
                   <ListView
                     requestNotes={this.requestNotes}
-                    setID={this.setID}
                     notes={this.props.notes}
-                    mode={this.state.mode}
+                    mode={this.props.mode}
                     toggleMode={this.toggleMode}
                     addNote={this.addNote}
                     id={this.props.match.params.id}
@@ -190,15 +183,14 @@ class App extends Component {
                     sortAscending={this.sortAscending}
                     sortDescending={this.sortDescending}
                     search={this.search}
-                    toggleMode={this.toggleMode}
                     deleteNote={this.deleteNote}
                     history={this.props.history}
-                    modal={this.state.modal}
-                    loading={this.state.loading}
+                    modal={this.props.modal}
+                    loading={this.props.loading}
                     setLoading={this.setLoading}
-                    deleteId={this.state.deleteId}
+                    noteId={this.props.noteId}
                     toggleModal={this.toggleModal}
-                    setDeleteId={this.setDeleteId}
+                    setId={this.setId}
                   />
                 )}
               />
@@ -209,13 +201,17 @@ class App extends Component {
                   <FormComponent
                     {...props}
                     header={"Update Existing Note"}
-                    mode={this.state.mode}
+                    mode={this.props.mode}
                     buttonText="Update"
                     toggleMode={this.toggleMode}
                     editNote={this.editNote}
                     match={this.props.match}
-                    id={this.props.match.id}
                     history={this.props.history}
+                    id={this.props.noteId}
+                    setLoading={this.setLoading}
+                    loading={this.props.loading}
+                    title={this.props.title}
+                    textBody={this.props.textBody}
                   />
                 )}
               />
@@ -226,11 +222,18 @@ class App extends Component {
                 render={(props) => (
                   <NoteComponent
                     {...props}
-                    notes={this.props.notes}
+                    setLoading={this.setLoading}
+                    note={this.props.note}
                     toggleMode={this.toggleMode}
                     deleteNote={this.deleteNote}
                     editNote={this.editNote}
-                    mode={this.state.mode}
+                    id={this.props.noteId}
+                    mode={this.props.mode}
+                    loading={this.props.loading}
+                    setLoading={this.setLoading}
+                    getNote={this.getNote}
+                    title={this.props.title}
+                    textBody={this.props.textBody}
                   />
                 )}
               />
@@ -240,12 +243,12 @@ class App extends Component {
                 render={(props) => (
                   <FormComponent
                     header={"Create New Note"}
-                    mode={this.state.mode}
+                    mode={this.props.mode}
                     toggleMode={this.toggleMode}
                     buttonText="Save"
+                    id={this.props.noteId}
+                    setLoading={this.setLoading}
                     addNote={this.addNote}
-                    id={this.props.match.params.id}
-                    history={this.props.history}
                   />
                 )}
               />
@@ -269,6 +272,13 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   notes: state.notes,
   newId: state.newId,
+  mode: state.mode,
+  modal: state.modal,
+  noteId: state.currentNote._id,
+  title: state.currentNote.title,
+  textBody: state.currentNote.textBody,
+  loading: state.loading,
+  note: state.currentNote
 });
 export default connect(mapStateToProps, {
   login,
@@ -280,4 +290,9 @@ export default connect(mapStateToProps, {
   sortAscending,
   sortDescending,
   searching,
+  toggleModal,
+  toggleMode,
+  setId,
+  setLoading,
+  getNote
 })(App);

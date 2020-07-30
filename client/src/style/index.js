@@ -95,7 +95,7 @@ export const AppHeader = styled.h1`
 `;
 
 export const ModalDiv = styled.div`
-	z-index: 10;
+	z-index: 100;
 	opacity: 1;
 	border: 1px solid white;
 	border-radius: 10px;
@@ -149,7 +149,7 @@ margin: 2.5% 0;
 `
 export const DeleteButton = styled.button`
 	width: 50%;
-	z-index: 100;
+	z-index: 80;
 	font-size: 1.6rem;
 	position: absolute;
 	border: none;

@@ -1,6 +1,7 @@
 import axios from "axios";
-import history from '../history'
 export const REGISTER = "REGISTER";
+export const TOGGLEMODE = "TOGGLEMODE";
+export const TOGGLEMODAL = "TOGGLEMODAL";
 export const LOGIN = "LOGIN";
 export const REQUEST_SENT = "REQUEST_SENT";
 export const REQUEST_SUCCESS = "REQUEST_SUCCESS";
@@ -11,8 +12,9 @@ export const DELETE = "DELETE";
 export const SORTASC = "SORTASC";
 export const SORTDSC = "SORTDSC";
 export const SEARCH = "SEARCH";
-
-
+export const SETID = "SETID";
+export const GETNOTE = "GETNOTE";
+export const SETLOADING = "SETLOADING";
 
 export const login = ({ email, password }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
@@ -36,22 +38,24 @@ export const login = ({ email, password }) => (dispatch) => {
       dispatch({ type: LOGIN, payload: response.data.data.login });
     })
     .catch((err) => {
-      if(err.response){
-        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
-      }
-      else {
-        dispatch({ type: REQUEST_ERROR, payload: err});
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
     });
 };
 
 export const register = ({ email, password }) => (dispatch) => {
-	dispatch({ type: REQUEST_SENT });
-	axios({
-	  method: "post",
-	  baseURL: "http://localhost:8000/graphql",
-	  data: {
-		query: `
+  dispatch({ type: REQUEST_SENT });
+  axios({
+    method: "post",
+    baseURL: "http://localhost:8000/graphql",
+    data: {
+      query: `
 		mutation {
 			register(credentials: {email: "${email}", password: "${password}"}){
 			  _id
@@ -61,19 +65,22 @@ export const register = ({ email, password }) => (dispatch) => {
 			}
 		  }
 		  `,
-	  },
-	})
-	  .then((response) => {
-		dispatch({ type: REGISTER, payload: response.data.data.register });
-	  })
-	  .catch((err) => {
-      if(err.response){
-        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+    },
+  })
+    .then((response) => {
+      dispatch({ type: REGISTER, payload: response.data.data.register });
+    })
+    .catch((err) => {
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
-      else {
-        dispatch({ type: REQUEST_ERROR, payload: err});
-      }	  });
-  };
+    });
+};
 
 export const requestNotes = () => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
@@ -81,7 +88,7 @@ export const requestNotes = () => (dispatch) => {
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      Authorization: `${localStorage.getItem('TOKEN')}`,
+      Authorization: `${localStorage.getItem("TOKEN")}`,
     },
     data: {
       query: `
@@ -93,18 +100,62 @@ export const requestNotes = () => (dispatch) => {
           updatedAt
         }
       }
-      `
-    }
+      `,
+    },
   })
     .then((response) => {
-      dispatch({ type: REQUEST_SUCCESS, payload: response.data.data.getAllNotes });
+      dispatch({
+        type: REQUEST_SUCCESS,
+        payload: response.data.data.getAllNotes,
+      });
     })
     .catch((err) => {
-      if(err.response){
-        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
-      else {
-        dispatch({ type: REQUEST_ERROR, payload: err});
+    });
+};
+
+export const getNote = (id) => (dispatch) => {
+  dispatch({ type: REQUEST_SENT });
+  axios({
+    method: "post",
+    baseURL: "http://localhost:8000/graphql",
+    headers: {
+      Authorization: `${localStorage.getItem("TOKEN")}`,
+    },
+    data: {
+      query: `
+      {
+        getNote(noteId: "${id}") {
+          _id
+          title
+          textBody
+          updatedAt
+        }
+      }
+      `,
+    },
+  })
+    .then((response) => {
+      dispatch({
+        type: GETNOTE,
+        payload: response.data.data.getNote,
+      });
+    })
+    .catch((err) => {
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
     });
 };
@@ -115,37 +166,37 @@ export const addNote = (note) => (dispatch) => {
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      Authorization: `${localStorage.getItem('TOKEN')}`,
+      Authorization: `${localStorage.getItem("TOKEN")}`,
     },
     data: {
       query: `
        mutation {
-        addNote(content: {title: "${note.title}", textBody: "${note.textBody}"}, userId: "${localStorage.getItem('ID')}" ){
+        addNote(content: {title: "${note.title}", textBody: "${
+        note.textBody
+      }"}, userId: "${localStorage.getItem("ID")}" ){
         _id
         title
         textBody
-        createdBy{
-          email
-        }
         updatedAt
         }
     }
-      `
-    }
+      `,
+    },
   })
     .then((response) => {
-      console.log(response)
-      dispatch({ type: ADD, payload: response.data.data.addNote._id });
+      console.log(response);
+      dispatch({ type: ADD, payload: response.data.data.addNote });
     })
     .catch((err) => {
-      if(err.response){
-        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
-      }
-      else {
-        dispatch({ type: REQUEST_ERROR, payload: err});
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
     });
-
 };
 
 export const editNote = (note) => (dispatch) => {
@@ -154,7 +205,7 @@ export const editNote = (note) => (dispatch) => {
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      Authorization: `${localStorage.getItem('TOKEN')}`,
+      Authorization: `${localStorage.getItem("TOKEN")}`,
     },
     data: {
       query: `
@@ -163,57 +214,68 @@ export const editNote = (note) => (dispatch) => {
         _id
         title
         textBody
-        createdBy{
-          email
-        }
         updatedAt
         }
     }
-      `
-    }
+      `,
+    },
   })
     .then((response) => {
-      console.log(response)
+      console.log(response);
       dispatch({ type: UPDATE, payload: response.data.data.editNote });
     })
     .catch((err) => {
-      if(err.response){
-        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
-      }
-      else {
-        dispatch({ type: REQUEST_ERROR, payload: err});
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
     });
-
 };
 
 export const deleteNote = (noteId) => (dispatch) => {
-  console.log(noteId)
+  console.log(noteId);
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
     baseURL: "http://localhost:8000/graphql",
     headers: {
-      Authorization: `${localStorage.getItem('TOKEN')}`,
+      Authorization: `${localStorage.getItem("TOKEN")}`,
     },
     data: {
       query: `
       mutation {
-        deleteNote(noteId: "${noteId}", userId: "${localStorage.getItem('ID')}" )
+        deleteNote(noteId: "${noteId}", userId: "${localStorage.getItem(
+        "ID"
+      )}" ){
+        createdNotes{
+          _id
+          title
+          textBody
+          updatedAt
+        }
+      }
     }
-      `
-    }
+      `,
+    },
   })
     .then((response) => {
-      console.log(response)
-      dispatch({ type: DELETE, payload: response.data.data.deleteNote });
+      dispatch({
+        type: DELETE,
+        payload: response.data.data.deleteNote.createdNotes,
+      });
     })
     .catch((err) => {
-      if(err.response){
-        dispatch({ type: REQUEST_ERROR, payload: err.response.data.errors[0].message});
-      }
-      else {
-        dispatch({ type: REQUEST_ERROR, payload: err});
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
       }
     });
 };
@@ -253,4 +315,17 @@ export const searching = (searchTerm) => (dispatch) => {
   } else {
     dispatch({ type: SEARCH, payload: searchTerm });
   }
+};
+
+export const toggleMode = (mode) => (dispatch) => {
+  dispatch({ type: TOGGLEMODE, payload: mode });
+};
+export const toggleModal = (bool) => (dispatch) => {
+  dispatch({ type: TOGGLEMODAL, payload: bool });
+};
+export const setId = (id) => (dispatch) => {
+  dispatch({ type: SETID, payload: id });
+};
+export const setLoading = (bool) => (dispatch) => {
+  dispatch({ type: SETLOADING, payload: bool });
 };

@@ -6,8 +6,9 @@ const responseStatus = require("../../config/responseStatuses");
 
 module.exports = {
   getAllNotes: async (args, req) => {
+    // seedingFunction()
     try {
-      const notes = await Note.find();
+      const notes = await Note.find().sort({ updatedAt: 'desc'});
       return notes.map((note) => {
         return { ...note._doc };
       });
@@ -16,9 +17,19 @@ module.exports = {
     }
   },
 
-  getNote: async ({ noteId }, req) => {
+  getNote: async ({noteId}) => {
 
+    try {
+      const note = await Note.findOne({ _id: noteId });
+      if(!note){
+        errorHandler(responseStatus.noteNotFound);
+      }
+      return {...note._doc}
+    } catch (err) {
+      errorHandler(err);
+    }
   },
+
 
   addNote: async ({ content, userId }, req) => {
     const noteContent = new Note({
@@ -53,7 +64,7 @@ module.exports = {
         if(content.textBody){
           note.textBody = content.textBody
         }
-        note.save()
+        await note.save()
         return { ...note._doc };
       }
     } catch (err) {
@@ -72,8 +83,8 @@ module.exports = {
         errorHandler(responseStatus.userNotFound);
       } else {
         note.remove()
-        user.save()
-        return "Note deleted successfully."
+        await user.save()
+        return {...user._doc}
       }
     } catch (err) {
       errorHandler(err);
