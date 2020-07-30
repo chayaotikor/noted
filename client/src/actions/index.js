@@ -3,6 +3,7 @@ export const REGISTER = "REGISTER";
 export const TOGGLEMODE = "TOGGLEMODE";
 export const TOGGLEMODAL = "TOGGLEMODAL";
 export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
 export const REQUEST_SENT = "REQUEST_SENT";
 export const REQUEST_SUCCESS = "REQUEST_SUCCESS";
 export const REQUEST_ERROR = "REQUEST_ERROR";
@@ -325,3 +326,8 @@ export const setId = (id) => (dispatch) => {
 export const setLoading = (bool) => (dispatch) => {
   dispatch({ type: SETLOADING, payload: bool });
 };
+
+export const logout = (message) => (dispatch) => {
+  localStorage.clear();
+  dispatch({type: LOGOUT, payload: message})
+}

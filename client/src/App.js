@@ -7,7 +7,7 @@ import {
   SearchContainer,
   SearchInput,
   SortContainer,
-  Button,
+  LogoutButton,
 } from "./style";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -26,6 +26,7 @@ import {
   setId,
   setLoading,
   getNote,
+  logout
 } from "./actions";
 //Views
 import { ListView } from "./views/ListView";
@@ -88,10 +89,8 @@ class App extends Component {
     this.props.register(credentials);
   };
   logout = () => {
-    localStorage.clear();
-    const token = localStorage.getItem("TOKEN");
-    console.log(token);
-    this.props.history.push("/auth");
+    const message = "Logged out successfully."
+    this.props.logout(message)
   };
 
   //Note Methods
@@ -141,8 +140,15 @@ class App extends Component {
         <>
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
+          <LogoutButton
+            to="/auth"
+              onClick={() => {
+                this.logout();
+              }}
+            >
+              Logout
+            </LogoutButton>
             <AppHeader mode={this.props.mode}>Noted</AppHeader>
-
             <SearchContainer mode={this.props.mode}>
               <SearchInput
                 name="searchTerm"
@@ -241,15 +247,7 @@ class App extends Component {
                 )}
               />
             </Switch>
-            {/* <Button
-            auth
-              onClick={(e) => {
-                e.preventDefault();
-                this.logout();
-              }}
-            >
-              Logout
-            </Button> */}
+
           </AppContainer>
         </>
       );
@@ -271,6 +269,7 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps, {
   login,
+  logout,
   register,
   requestNotes,
   addNote,

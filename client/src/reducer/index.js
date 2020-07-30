@@ -13,6 +13,7 @@ import {
   SETID,
   SETLOADING,
   GETNOTE,
+  LOGOUT
 } from "../actions";
 
 const initialState = {
@@ -125,6 +126,11 @@ export const reducer = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
+    case LOGOUT:
+      return {
+        ...state,
+        message: action.payload
+      }
 
     default:
       return state;
