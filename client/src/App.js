@@ -6,6 +6,7 @@ import {
   SortH2,
   SearchContainer,
   SearchInput,
+  SettingsButton,
   SortContainer,
   LogoutButton,
 } from "./style";
@@ -34,14 +35,12 @@ import { ListView } from "./views/ListView";
 //Components
 import { NoteComponent } from "./components/NoteComponent";
 import FormComponent from "./components/FormComponent";
+import SettingsView from "./views/SettingsView";
 import Authentication from "./components/Authentication";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      searchTerm: "",
-    };
   }
 
   //Loading
@@ -148,10 +147,12 @@ class App extends Component {
             >
               Logout
             </LogoutButton>
+            <SettingsButton to='/settings' onClick={() => {
+                this.toggleMode('settings');
+              }} />
             <AppHeader mode={this.props.mode}>Noted</AppHeader>
             <SearchContainer mode={this.props.mode}>
               <SearchInput
-                name="searchTerm"
                 onChange={(e) => this.search(e)}
                 placeholder={"search notes..."}
                 type="text"
@@ -243,6 +244,15 @@ class App extends Component {
                     id={this.props.noteId}
                     setLoading={this.setLoading}
                     addNote={this.addNote}
+                  />
+                )}
+              />
+              <Route
+                path={"/settings"}
+                render={(props) => (
+                  <SettingsView
+                    mode={this.props.mode}
+                    toggleMode={this.toggleMode}
                   />
                 )}
               />

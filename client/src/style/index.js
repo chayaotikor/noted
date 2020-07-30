@@ -1,6 +1,7 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import reset from "styled-reset";
 import xIcon from "./x-icon.png";
+import settingsIcon from "./settings-icon.png";
 import { Link } from "react-router-dom";
 
 // font-family: 'Dancing Script', cursive;
@@ -78,7 +79,6 @@ export const AppContainer = styled.main`
 
 
 export const LogoutButton = styled(Link)`
-  border: 1px solid red;
   position: fixed;
   top: 0;
   padding: 1% 0;
@@ -90,7 +90,6 @@ export const LogoutButton = styled(Link)`
   font-weight: bold;
   text-decoration: none;
   background: #4c132c;
-  border: 2px solid #FFF;
   border-radius: 10px;
   font-family: "Montserrat", sans-serif;
   :hover {
@@ -107,6 +106,21 @@ export const LogoutButton = styled(Link)`
     outline: none;
   }
 `;
+
+export const SettingsButton = styled(Link)`
+position: fixed;
+top: 0;
+left: 0;
+margin: 1rem;
+height: 2.4rem;
+width: 2.4rem;
+background: none;
+background-image: url(${settingsIcon});
+background-position: center;
+background-repeat: no-repeat;
+cursor: pointer;
+`;
+
 export const AppHeader = styled.h1`
   font-family: "Dancing Script", cursive;
   font-size: 4rem;
