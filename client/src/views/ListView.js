@@ -2,13 +2,17 @@ import React, { useEffect } from "react";
 import {
   NoteContainer,
   NoteLink,
-  H2,
   NoteListSection,
-  Button,
   DeleteButton,
+  ModalDiv,
+
+} from "../style/note-styles";
+
+import {
+  H2,
+  Button,
   ButtonContainer,
   LoadingSpan,
-  ModalDiv,
   H1,
 } from "../style";
 

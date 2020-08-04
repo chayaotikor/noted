@@ -10,8 +10,7 @@ export const REQUEST_ERROR = "REQUEST_ERROR";
 export const ADD = "ADD";
 export const UPDATE = "UPDATE";
 export const DELETE = "DELETE";
-export const SORTASC = "SORTASC";
-export const SORTDSC = "SORTDSC";
+export const SORT = "SORT";
 export const SEARCH = "SEARCH";
 export const SETID = "SETID";
 export const GETNOTE = "GETNOTE";
@@ -281,7 +280,8 @@ export const deleteNote = (noteId) => (dispatch) => {
     });
 };
 
-export const sortAscending = () => (dispatch) => {
+export const sort = (type) => (dispatch) => {
+if(type === 'ascending'){
   function compare(a, b) {
     const titleA = a.title.toUpperCase();
     const titleB = b.title.toUpperCase();
@@ -293,9 +293,10 @@ export const sortAscending = () => (dispatch) => {
     }
     return comparison;
   }
-  dispatch({ type: SORTASC, payload: compare });
-};
-export const sortDescending = () => (dispatch) => {
+  dispatch({ type: SORT, payload: compare });
+} 
+
+if (type === 'descending'){
   function compare(a, b) {
     const titleA = a.title.toUpperCase();
     const titleB = b.title.toUpperCase();
@@ -307,8 +308,37 @@ export const sortDescending = () => (dispatch) => {
     }
     return comparison;
   }
-  dispatch({ type: SORTDSC, payload: compare });
-};
+  dispatch({ type: SORT, payload: compare });
+}
+ if(type === 'newest' ){
+  function compare(a, b) {
+    const dateA = a.updatedAt;
+    const dateB = b.updatedAt;
+    let comparison = 0;
+    if (dateA < dateB) {
+      comparison = 1;
+    } else if (dateA > dateB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+  dispatch({ type: SORT, payload: compare });
+ }
+ if(type === 'oldest' ){
+  function compare(a, b) {
+    const dateA = a.updatedAt;
+    const dateB = b.updatedAt;
+    let comparison = 0;
+    if (dateA > dateB) {
+      comparison = 1;
+    } else if (dateA < dateB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+  dispatch({ type: SORT, payload: compare });
+ }
+}
 
 export const searching = (list) => (dispatch) => {
   dispatch({ type: SEARCH, payload: list });

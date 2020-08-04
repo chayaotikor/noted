@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import {
-  NoteForm,
   H1,
-  NoteFormInput,
-  Textarea,
   ButtonContainer,
   Button,
 } from "../style";
+import {
+  NoteForm,
+  NoteFormInput,
+  Textarea,
+} from "../style/form-styles";
 import { Link } from "react-router-dom";
 
 

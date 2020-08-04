@@ -1,11 +1,10 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import reset from "styled-reset";
-import xIcon from "./x-icon.png";
 import settingsIcon from "./settings-icon.png";
+import sortIcon from "./sort-icon.png";
 import { Link } from "react-router-dom";
 
 // font-family: 'Dancing Script', cursive;
-
 // font-family: 'Montserrat', sans-serif;
 
 //Global Styles
@@ -62,7 +61,20 @@ export const spin = keyframes`
 	}
   `;
 
-//Main Containers
+export const LoadingSpan = styled.span`
+  position: absolute;
+  bottom: 25%;
+  left: calc(50% - 4em);
+  width: 6em;
+  height: 6em;
+  border: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-left: 1.1em solid #4c132c;
+  border-radius: 50%;
+  animation: ${spin} 1.1s infinite linear;
+  transition: opacity 0.3s;
+`;
+
+//Main Container
 export const AppContainer = styled.main`
   background: #ffaf9c;
   height: 100vh;
@@ -76,25 +88,41 @@ export const AppContainer = styled.main`
   z-index: 0;
 `;
 
-
-
-export const LogoutButton = styled(Link)`
+//Top Bar Components
+export const TopBarContainer = styled.div`
+  border-bottom: 2px solid #4c132c;
   position: fixed;
   top: 0;
-  padding: 1% 0;
+  z-index: 100;
+  padding: 1%;
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  @media only screen and (orientation: Portrait) and (max-width: 600px) {
+    max-height: 100px;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding: 1%;
+  }
+`;
+
+export const LogoutButton = styled(Link)`
   font-size: 1rem;
   padding: 1rem;
-  margin: 1rem;
-  right: 0;
-  color: #FFF;
+  width: 75px;
+  color: #fff;
   font-weight: bold;
+  text-align: center;
   text-decoration: none;
   background: #4c132c;
   border-radius: 10px;
   font-family: "Montserrat", sans-serif;
   :hover {
     animation: ${pulse} 1s infinite;
-    background: #FFF;
+    background: #fff;
     color: #4c132c;
     border: 2px dashed #4c132c;
     cursor: pointer;
@@ -105,28 +133,27 @@ export const LogoutButton = styled(Link)`
   :focus {
     outline: none;
   }
+  @media only screen and (orientation: Portrait) and (max-width: 600px) {
+    order: 0;
+  }
 `;
 
 export const SettingsButton = styled(Link)`
-position: fixed;
-top: 0;
-left: 0;
-margin: 1rem;
-height: 2.4rem;
-width: 2.4rem;
-background: none;
-background-image: url(${settingsIcon});
-background-position: center;
-background-repeat: no-repeat;
-cursor: pointer;
+  height: 2.4rem;
+  width: 2.4rem;
+  background: none;
+  background-image: url(${settingsIcon});
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  @media only screen and (orientation: Portrait) and (max-width: 600px) {
+    order: 0;
+  }
 `;
 
 export const AppHeader = styled.h1`
   font-family: "Dancing Script", cursive;
   font-size: 4rem;
-  position: absolute;
-  top: 0;
-  padding: 1rem 0;
   color: #4c132c;
   text-align: center;
   font-weight: bold;
@@ -138,109 +165,91 @@ export const AppHeader = styled.h1`
       : props.mode === "edit"
       ? "none"
       : "block"};
+  @media only screen and (orientation: Portrait) and (max-width: 600px) {
+    font-size: 2rem;
+    order: 1;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
 `;
 
-export const ModalDiv = styled.div`
-  z-index: 100;
-  opacity: 1;
-  border: 1px solid white;
+//Search Elements
+export const SearchInput = styled.input`
+  width: 20%;
+  padding: 1%;
+  font-family: "Montserrat", sans-serif;
+  background: #ffeade;
+  color: #4c132c;
   border-radius: 10px;
-  background: #ffaf9c;
-  width: 90%;
-  max-width: 400px;
-  margin: 0;
-  padding: 2.5% 0;
-  display: ${(props) => (props.modal ? "flex" : "none")};
-  justify-content: space-around;
-  align-items: center;
-  flex-flow: column wrap;
-  position: absolute;
-  -webkit-box-shadow: 0px 0px 300px 200px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 300px 200px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 300px 200px rgba(0, 0, 0, 0.75);
-`;
-
-export const NoteListSection = styled.section`
-  background: #fff;
-  width: 100%;
-  max-height: 65vh;
-  min-height: 20vh;
-  display: flex;
-  padding: 2.5%;
-  overflow-y: scroll;
-  justify-content: space-around;
-  align-items: center;
-  flex-flow: row wrap;
-  -webkit-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
-  -moz-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
-  box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
-`;
-
-export const NoteContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  width: 100px;
-  height: 100px;
-  align-items: flex-end;
-  background: #4c132c;
-  flex-flow: column nowrap;
-  align-items: center;
-  position: relative;
-  justify-content: stretch;
-  position: relative;
-  border-radius: 10%;
-  margin: 2.5% 0;
-`;
-export const DeleteButton = styled.button`
-  width: 50%;
-  z-index: 80;
-  font-size: 1.6rem;
-  position: absolute;
-  border: none;
-  border-radius: 50%;
-  top: 0;
-  right: 0;
-  margin: 1rem;
-  height: 1.6rem;
-  width: 1.6rem;
-  background: none;
-  background-color: #4c132c;
-  background-image: url(${xIcon});
-  background-position: center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-export const NoteLink = styled(Link)`
-  overflow: hidden;
-  z-index: 1;
-  text-decoration: none;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 2px dashed #4c132c;
   text-align: center;
-  color: #fff;
-  padding: 5%;
-  :hover {
-    animation: ${pulse} 1s infinite;
-    background: white;
-    color: #4c132c;
-    border: 2px dashed #4c132c;
-    border-radius: 10%;
-    cursor: pointer;
-    -webkit-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
-    -moz-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
-    box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
+  :focus {
+    outline: none;
   }
+  display: ${(props) =>
+    props.mode === "single"
+      ? "none"
+      : props.mode === "create"
+      ? "none"
+      : props.mode === "edit"
+      ? "none"
+      : "block"};
+  @media only screen and (orientation: Portrait) and (max-width: 600px) {
+    width: 45%;
+    order: 2;
+  }
+`;
+
+//Sort Elements
+export const SortContainer = styled.select`
+  border: 1px solid blue;
+  font-family: "Montserrat", sans-serif;
+  background: #ffeade;
+  width: 20%;
+  padding: 1%;
+  color: #4c132c;
+  border-radius: 10px;
+  border: 2px dashed #4c132c;
+  text-align: center;
+  display: ${(props) =>
+    props.mode === "single"
+      ? "none"
+      : props.mode === "create"
+      ? "none"
+      : props.mode === "edit"
+      ? "none"
+      : "block"};
+
+  :focus {
+    outline: none;
+  }
+  ::-ms-expand {
+    display: none;
+  }
+  -ms-word-break: normal;
+  word-break: normal;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url(${sortIcon});
+  background-repeat: no-repeat;
+  background-position: right 0.7em top 50%;
+  background-size: 1.6rem auto;
+  @media only screen and (orientation: Portrait) and (max-width: 600px) {
+    width: 45%;
+    order: 2;
+  }
+`;
+
+export const SortOption = styled.option`
+  font-family: "Montserrat", sans-serif;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #4c132c;
+  background-color: #ffeade;
 `;
 
 //Text Elements
-
 export const H1 = styled.h1`
   font-family: "Dancing Script", cursive;
   font-size: ${(props) => (props.component === "delete" ? "2.5rem" : "3rem")};
@@ -273,87 +282,6 @@ export const P = styled.p`
   height: 60vh;
   overflow: hidden auto;
   text-align: justify;
-`;
-
-//Search Elements
-export const SearchContainer = styled.form`
-  justify-content: space-between;
-  align-items: center;
-  display: ${(props) => (props.mode === "list" ? "flex" : "none")};
-  flex-flow: column nowrap;
-  width: 100%;
-  padding: 2.5% 0 0;
-`;
-
-export const SearchInput = styled.input`
-  width: 100%;
-  padding: 2.5%;
-  font-family: "Montserrat", sans-serif;
-  border-radius: 10px;
-  margin-top: 5%;
-  border: 2px dashed #4c132c;
-  text-align: center;
-  :focus {
-    outline: none;
-  }
-`;
-
-//Sort Elements
-export const SortContainer = styled.div`
-  display: flex;
-  width: 80%;
-  padding: 2.5%;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const SortH2 = styled.h2`
-  font-family: "Montserrat", sans-serif;
-  text-align: center;
-  font-size: 1.4rem;
-  color: #4c132c;
-  cursor: pointer;
-  :hover {
-    color: "#FFF";
-    font-weight: bold;
-  }
-`;
-
-//Form Elements
-
-export const NoteForm = styled.form`
-  justify-content: space-between;
-  align-items: center;
-  display: flex;
-  flex-flow: column nowrap;
-  width: 90vw;
-  max-width: 600px;
-`;
-
-export const NoteFormInput = styled.input`
-  width: 70%;
-  padding: 2.5%;
-  font-family: "Montserrat", sans-serif;
-  border-radius: 10px;
-  margin-top: 5%;
-  border: 2px dashed #4c132c;
-  text-align: center;
-  :focus {
-    outline: none;
-  }
-`;
-
-export const Textarea = styled.textarea`
-  width: 100%;
-  padding: 10%;
-  font-family: "Montserrat", sans-serif;
-  border-radius: 10px;
-  border: 2px dashed #4c132c;
-  text-align: center;
-  margin-top: 2.5%;
-  :focus {
-    outline: none;
-  }
 `;
 
 //Buttons
@@ -393,55 +321,4 @@ export const Button = styled.button`
   :focus {
     outline: none;
   }
-`;
-
-export const AuthForm = styled.form`
-  justify-content: space-around;
-  background-color: #4c132c;
-  align-items: center;
-  display: flex;
-  padding: 2.5%;
-  flex-flow: column nowrap;
-  width: 50vw;
-  max-width: 600px;
-  border: 2px solid white;
-  border-radius: 10px;
-  height: 100%;
-  max-height: 250px;
-`;
-
-export const AuthFormHeading = styled.h1`
-font-family: "Dancing Script", cursive;
-	font-size: 3rem
-	color: #FFF;
-	text-align: center;
-	font-weight: bold;
-`;
-
-export const AuthFormInput = styled.input`
-  width: 100%;
-  font-family: "Montserrat", sans-serif;
-  border-radius: 10px;
-  border: 2px dashed #4c132c;
-  padding: 2.5%;
-`;
-
-export const AuthFormActions = styled.div`
-  display: flex;
-  flew-flow: row nowrap;
-  justify-content: space-around;
-  width: 100%;
-`;
-
-export const LoadingSpan = styled.span`
-  position: absolute;
-  bottom: 25%;
-  left: calc(50% - 4em);
-  width: 6em;
-  height: 6em;
-  border: 1.1em solid rgba(0, 0, 0, 0.2);
-  border-left: 1.1em solid #4c132c;
-  border-radius: 50%;
-  animation: ${spin} 1.1s infinite linear;
-  transition: opacity 0.3s;
 `;

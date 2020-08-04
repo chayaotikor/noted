@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import {
+  Button
+} from "../style";
+import {
   AuthForm,
   AuthFormInput,
   AuthFormHeading,
-  AuthFormActions,
-  Button,
-} from "../style";
+  AuthFormActions
+} from "../style/auth-styles";
 
 class Authentication extends Component {
   constructor(props) {

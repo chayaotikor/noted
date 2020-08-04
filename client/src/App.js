@@ -3,12 +3,12 @@ import {
   GlobalStyle,
   AppContainer,
   AppHeader,
-  SortH2,
-  SearchContainer,
+  SortOption,
   SearchInput,
   SettingsButton,
   SortContainer,
   LogoutButton,
+  TopBarContainer,
 } from "./style";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -19,15 +19,14 @@ import {
   addNote,
   editNote,
   deleteNote,
-  sortAscending,
-  sortDescending,
   searching,
   toggleModal,
   toggleMode,
   setId,
   setLoading,
   getNote,
-  logout
+  logout,
+  sort
 } from "./actions";
 //Views
 import { ListView } from "./views/ListView";
@@ -39,8 +38,6 @@ import SettingsView from "./views/SettingsView";
 import Authentication from "./components/Authentication";
 
 class App extends Component {
-
-
   //Loading
   setLoading = (bool) => {
     this.props.setLoading(bool);
@@ -59,6 +56,11 @@ class App extends Component {
     this.props.setId(id);
   };
   //Search&Sort Methods
+  sort = (e) => {
+    e.preventDefault();
+    this.props.sort(e.target.value)
+  }
+
   sortAscending = () => {
     this.props.sortAscending();
   };
@@ -86,8 +88,8 @@ class App extends Component {
     this.props.register(credentials);
   };
   logout = () => {
-    const message = "Logged out successfully."
-    this.props.logout(message)
+    const message = "Logged out successfully.";
+    this.props.logout(message);
   };
 
   //Note Methods
@@ -137,29 +139,40 @@ class App extends Component {
         <>
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
-          <LogoutButton
-            to="/auth"
-              onClick={() => {
-                this.logout();
-              }}
-            >
-              Logout
-            </LogoutButton>
-            <SettingsButton to='/settings' onClick={() => {
-                this.toggleMode('settings');
-              }} />
-            <AppHeader mode={this.props.mode}>Noted</AppHeader>
-            <SearchContainer mode={this.props.mode}>
-              <SearchInput
-                onChange={(e) => this.search(e)}
-                placeholder={"search notes..."}
-                type="text"
+            <TopBarContainer>
+              <SettingsButton
+                to="/settings"
+                onClick={() => {
+                  this.toggleMode("settings");
+                }}
               />
-              <SortContainer>
-                <SortH2 onClick={this.sortAscending}>Sort A-Z</SortH2>
-                <SortH2 onClick={this.sortDescending}>Sort Z-A</SortH2>
-              </SortContainer>
-            </SearchContainer>
+                <SearchInput
+                  onChange={(e) => this.search(e)}
+                  placeholder={"search notes..."}
+                  type="text"
+                  mode={this.props.mode}
+                />
+              <AppHeader mode={this.props.mode}>Noted</AppHeader>
+                <SortContainer mode={this.props.mode}
+                defaultValue="sort..."
+                onClick={e =>{ e.target.defaultValue = e.target.value; console.log(e.target.defaultValue)}}
+                >
+                <SortOption value="sort..." disabled hidden>sort...</SortOption>
+                  <SortOption value="ascending" onClick={e => this.sort(e)}>Title (Ascending)</SortOption>
+                  <SortOption value="descending" onClick={e => this.sort(e)}>Title (Descending)</SortOption>
+                  <SortOption value="newest" onClick={e => this.sort(e)}>Date (Newest)</SortOption>
+                  <SortOption value="oldest" onClick={e => this.sort(e)}>Date (Oldest)</SortOption>
+                </SortContainer>
+              <LogoutButton
+                to="/auth"
+                onClick={() => {
+                  this.logout();
+                }}
+              >
+                Logout
+              </LogoutButton>
+            </TopBarContainer>
+
             <Switch>
               <Route
                 exact
@@ -167,7 +180,11 @@ class App extends Component {
                 render={(props) => (
                   <ListView
                     requestNotes={this.requestNotes}
-                    notes={this.props.filteredNotes ? this.props.filteredNotes : this.props.notes }
+                    notes={
+                      this.props.filteredNotes
+                        ? this.props.filteredNotes
+                        : this.props.notes
+                    }
                     mode={this.props.mode}
                     toggleMode={this.toggleMode}
                     addNote={this.addNote}
@@ -254,7 +271,6 @@ class App extends Component {
                 )}
               />
             </Switch>
-
           </AppContainer>
         </>
       );
@@ -272,7 +288,7 @@ const mapStateToProps = (state) => ({
   textBody: state.currentNote.textBody,
   loading: state.loading,
   note: state.currentNote,
-  filteredNotes: state.filteredNotes
+  filteredNotes: state.filteredNotes,
 });
 export default connect(mapStateToProps, {
   login,
@@ -282,8 +298,7 @@ export default connect(mapStateToProps, {
   addNote,
   editNote,
   deleteNote,
-  sortAscending,
-  sortDescending,
+  sort,
   searching,
   toggleModal,
   toggleMode,
