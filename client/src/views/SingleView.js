@@ -4,9 +4,11 @@ import {
   P,
   ButtonContainer,
   Button,
-  NoteForm,
   LoadingSpan,
 } from "../style";
+import {
+  NoteForm,
+} from "../style/form-styles";
 import { Link } from "react-router-dom";
 
 export const SingleView = ({

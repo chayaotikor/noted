@@ -5,8 +5,7 @@ import {
   ADD,
   UPDATE,
   DELETE,
-  SORTASC,
-  SORTDSC,
+  SORT,
   SEARCH,
   TOGGLEMODE,
   TOGGLEMODAL,
@@ -86,12 +85,7 @@ export const reducer = (state = initialState, action) => {
         loading: false,
         currentNote: {},
       };
-    case SORTASC:
-      return {
-        ...state,
-        notes: state.notes.slice().sort(action.payload),
-      };
-    case SORTDSC:
+    case SORT:
       return {
         ...state,
         notes: state.notes.slice().sort(action.payload),
