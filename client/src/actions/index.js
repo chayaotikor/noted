@@ -21,7 +21,7 @@ export const login = ({ email, password }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     data: {
       query: `
 		query {
@@ -54,7 +54,7 @@ export const register = ({ email, password }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     data: {
       query: `
 		mutation {
@@ -87,7 +87,7 @@ export const requestNotes = () => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     headers: {
       Authorization: `${localStorage.getItem("TOKEN")}`,
     },
@@ -126,7 +126,7 @@ export const getNote = (id) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     headers: {
       Authorization: `${localStorage.getItem("TOKEN")}`,
     },
@@ -165,7 +165,7 @@ export const addNote = (note) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     headers: {
       Authorization: `${localStorage.getItem("TOKEN")}`,
     },
@@ -204,7 +204,7 @@ export const editNote = (note) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     headers: {
       Authorization: `${localStorage.getItem("TOKEN")}`,
     },
@@ -242,7 +242,7 @@ export const deleteNote = (noteId) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
-    baseURL: "http://localhost:8000/graphql",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
     headers: {
       Authorization: `${localStorage.getItem("TOKEN")}`,
     },

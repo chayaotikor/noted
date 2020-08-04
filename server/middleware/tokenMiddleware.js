@@ -9,7 +9,7 @@ module.exports = {
 	protected: (req, res, next) => {
 		try{
 			const token = req.headers.authorization;
-			const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+			const decodedToken = jwt.verify(token, process.env.SECUREKEY_AQUA_KEY)
 			req.decodedToken = decodedToken
 			next();
 		} catch {
@@ -22,7 +22,7 @@ module.exports = {
 			id: user._id,
 			email: user.email
 		};
-		const secret = process.env.JWT_SECRET;
+		const secret = process.env.SECUREKEY_AQUA_KEY;
 		const options = {
 			expiresIn: '1h'
 		};
