@@ -39,9 +39,7 @@ import SettingsView from "./views/SettingsView";
 import Authentication from "./components/Authentication";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
+
 
   //Loading
   setLoading = (bool) => {
@@ -119,7 +117,7 @@ class App extends Component {
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
             <AppHeader mode={this.props.mode}>Noted</AppHeader>
-            <Redirect exact from="/" exact to="/auth" />
+            <Redirect from="/" exact to="/auth" />
             <Route
               exact
               path={"/auth"}
@@ -225,7 +223,6 @@ class App extends Component {
                     id={this.props.noteId}
                     mode={this.props.mode}
                     loading={this.props.loading}
-                    setLoading={this.setLoading}
                     getNote={this.getNote}
                     title={this.props.title}
                     textBody={this.props.textBody}

@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 export const SingleView = ({
   toggleMode,
   note,
-  history,
   getNote,
   setLoading,
   loading,
@@ -25,7 +24,7 @@ export const SingleView = ({
         setLoading(false);
 	  }, 2000);
     }
-  }, []);
+  }, [getNote, id, setLoading]);
 
   if (loading || !note.title || !note.textBody) {
 	  console.log(note, loading)

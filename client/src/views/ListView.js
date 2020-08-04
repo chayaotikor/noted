@@ -32,7 +32,7 @@ export const ListView = ({
         setLoading(false);
       }, 2000);
     }
-  }, []);
+  }, [requestNotes, setLoading]);
 
   if (loading) {
     return <LoadingSpan />;
