@@ -5,10 +5,10 @@ const errorHandler = require("../../config/errorHandler");
 const responseStatus = require("../../config/responseStatuses");
 
 module.exports = {
-  getAllNotes: async (args, req) => {
+  getAllNotes: async ({userId}) => {
     // seedingFunction()
     try {
-      const notes = await Note.find().sort({ updatedAt: 'desc'});
+      const notes = await Note.find({createdBy: userId}).sort({ updatedAt: 'desc'});
       return notes.map((note) => {
         return { ...note._doc };
       });

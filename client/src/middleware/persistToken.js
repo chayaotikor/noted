@@ -1,5 +1,5 @@
 import {LOGIN,
-	REGISTER} from '../actions'
+	REGISTER, CHANGEPASSWORD} from '../actions'
 export const persistToken = store => next => action => {
     switch(action.type) {
     case LOGIN:
@@ -13,6 +13,10 @@ export const persistToken = store => next => action => {
         localStorage.setItem('ID', action.payload._id)
         localStorage.setItem('EXP', action.payload.tokenExpiration)
         localStorage.setItem('EMAIL', action.payload.email)
+        break;
+    case CHANGEPASSWORD:
+        localStorage['TOKEN'] =  action.payload.token
+        localStorage['EXP']=  action.payload.tokenExpiration   
         break;
     default:
     break

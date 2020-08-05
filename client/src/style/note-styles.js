@@ -14,10 +14,11 @@ align-items: center;
 
 export const NoteListSection = styled.section`
   background: #fff;
-  width: 100%;
-  height: 100%;
+  min-width: 50wv;
   max-height: 70vh;
   min-height: 20vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   padding: 2.5%;
   overflow-y: scroll;

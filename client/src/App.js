@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import {
   login,
   register,
+  changePassword,
   requestNotes,
   addNote,
   editNote,
@@ -87,6 +88,9 @@ class App extends Component {
   register = (credentials) => {
     this.props.register(credentials);
   };
+  changePassword = (credentials) => {
+    this.props.changePassword(credentials);
+  }
   logout = () => {
     const message = "Logged out successfully.";
     this.props.logout(message);
@@ -267,8 +271,10 @@ class App extends Component {
                 path={"/settings"}
                 render={(props) => (
                   <SettingsView
+                    history={props.history}
                     mode={this.props.mode}
                     toggleMode={this.toggleMode}
+                    changePassword={this.changePassword}
                   />
                 )}
               />
@@ -296,6 +302,7 @@ export default connect(mapStateToProps, {
   login,
   logout,
   register,
+  changePassword,
   requestNotes,
   addNote,
   editNote,
