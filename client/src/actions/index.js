@@ -1,5 +1,6 @@
 import axios from "axios";
 export const REGISTER = "REGISTER";
+export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const TOGGLEMODE = "TOGGLEMODE";
 export const TOGGLEMODAL = "TOGGLEMODAL";
 export const LOGIN = "LOGIN";
@@ -49,6 +50,39 @@ export const login = ({ email, password }) => (dispatch) => {
     });
 };
 
+export const changePassword = ({oldPassword, newPassword}) =>(dispatch) => {
+  dispatch({ type: REQUEST_SENT });
+  axios({
+    method: "post",
+    baseURL: `${process.env.REACT_APP_DB_URL}`,
+    data: {
+      query: `
+		mutation {
+			changePassword(email: "${localStorage.getItem('EMAIL')}", oldPassword: "${oldPassword}", newPassword: "${newPassword}"){
+			  _id
+			  email
+			  token
+			  tokenExpiration
+			}
+		  }
+		  `,
+    },
+  })
+    .then((response) => {
+      dispatch({ type: CHANGEPASSWORD, payload: response.data.data.changePassword });
+    })
+    .catch((err) => {
+      if (err.response) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: err.response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REQUEST_ERROR, payload: err });
+      }
+    });
+}
+
 export const register = ({ email, password }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
@@ -93,7 +127,7 @@ export const requestNotes = () => (dispatch) => {
     data: {
       query: `
       {
-        getAllNotes {
+        getAllNotes(userId: "${localStorage.getItem('ID')}") {
           _id
           title
           textBody

@@ -12,7 +12,10 @@ import {
   SETID,
   SETLOADING,
   GETNOTE,
-  LOGOUT
+  LOGOUT,
+  LOGIN,
+  REGISTER,
+  CHANGEPASSWORD,
 } from "../actions";
 
 const initialState = {
@@ -123,8 +126,29 @@ export const reducer = (state = initialState, action) => {
     case LOGOUT:
       return {
         ...state,
-        message: action.payload
-      }
+        notes: [],
+        filteredNotes: null,
+        mode: 'list',
+        message: action.payload,
+      };
+    case LOGIN:
+      return {
+        ...state,
+        message: "Logged in successfully.",
+        loading: true
+      };
+    case REGISTER:
+      return {
+        ...state,
+        message: "Registration successful.",
+        loading: true
+      };
+    case CHANGEPASSWORD:
+      return {
+        ...state,
+        message: "Password changed successfully.",
+        loading: false
+      };
 
     default:
       return state;

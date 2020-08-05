@@ -47,4 +47,27 @@ module.exports = {
      errorHandler(err);
     }
   },
+
+  changePassword: async ({email, oldPassword, newPassword}) => {
+    try {
+      const user = await User.findOne({ email: email });
+      if (!user) {
+       errorHandler(responseStatus.badCredentials);
+      }
+      const correctCreds = await bcrypt.compareSync(oldPassword, user.password);
+      if (!correctCreds) {
+        errorHandler(responseStatus.badCredentials);
+      }
+
+      if(user && correctCreds){
+        const hashed = await bcrypt.hash(newPassword, 14);
+        user.password = hashed
+        await user.save()
+        const token = generateToken({ ...user });
+        return { ...user._doc, token, tokenExpiration: 1 };
+      }
+    } catch (err) {
+      errorHandler(err);
+     }
+  }
 };

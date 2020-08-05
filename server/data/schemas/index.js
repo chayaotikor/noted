@@ -40,7 +40,7 @@ module.exports = buildSchema(`
  }
 
  type RootQuery {
-     getAllNotes: [Note!]!
+     getAllNotes(userId: ID!): [Note!]!
      getNote(noteId: ID!): Note!
      login(email: String!, password: String!): AuthData!
  }
@@ -50,6 +50,7 @@ module.exports = buildSchema(`
      addNote(content: CreateInput, userId: ID!): Note
      editNote(content: UpdateInput, noteId: ID!): Note
      deleteNote(noteId: ID!, userId: ID!): User
+     changePassword(email: String!, oldPassword: String!, newPassword: String!): User
  }
 
  schema {

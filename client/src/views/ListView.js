@@ -44,7 +44,7 @@ export const ListView = ({
     return (
       <ListViewContainer>
 
-        {notes ? (
+        {notes.length > 0 ? (
           <NoteListSection>
             {notes.map((note, index) => (
               <NoteContainer key={index}>
@@ -66,9 +66,7 @@ export const ListView = ({
                 </NoteContainer>
             ))}
           </NoteListSection>
-        ) : (
-          <h1>No notes, create a new one</h1>
-        )}
+        ) : null}
           <ButtonContainer>
           <Button
             onClick={(event) => {
