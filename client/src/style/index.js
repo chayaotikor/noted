@@ -83,7 +83,7 @@ export const AppContainer = styled.main`
   max-width: 600px;
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   z-index: 0;
 `;
@@ -170,6 +170,7 @@ export const AppHeader = styled.h1`
     order: 1;
     margin-bottom: 1rem;
     width: 100%;
+    text-align: center;
   }
 `;
 
@@ -304,7 +305,7 @@ export const Button = styled.button`
   margin: ${(props) => (props.auth ? "2.5% 0 0" : "2.5% 1%")};
   border: none;
   border-radius: 10px;
-  width: 200px;
+  width: ${props => props.auth ? '47.5%': '200px'};
   background: ${(props) => (props.auth ? "#FFF" : "#4c132c")};
   font-weight: bold;
   text-align: center;

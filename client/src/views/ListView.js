@@ -5,7 +5,7 @@ import {
   NoteListSection,
   DeleteButton,
   ModalDiv,
-
+  ListViewContainer
 } from "../style/note-styles";
 
 import {
@@ -42,7 +42,8 @@ export const ListView = ({
     return <LoadingSpan />;
   } else {
     return (
-      <>
+      <ListViewContainer>
+
         {notes ? (
           <NoteListSection>
             {notes.map((note, index) => (
@@ -68,7 +69,7 @@ export const ListView = ({
         ) : (
           <h1>No notes, create a new one</h1>
         )}
-        <ButtonContainer>
+          <ButtonContainer>
           <Button
             onClick={(event) => {
               event.preventDefault();
@@ -101,7 +102,7 @@ export const ListView = ({
             Cancel
           </Button>
         </ModalDiv>
-      </>
+      </ListViewContainer>
     );
   }
 };

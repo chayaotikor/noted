@@ -3,17 +3,27 @@ import xIcon from "./x-icon.png";
 import { Link } from "react-router-dom";
 import {pulse} from './index'
 
+export const ListViewContainer = styled.div`
+height: 80vh;
+display: flex;
+flex-flow: column nowrap;
+justify-content: space-between;
+align-items: center;
+`
+
 
 export const NoteListSection = styled.section`
   background: #fff;
   width: 100%;
-  max-height: 65vh;
+  height: 100%;
+  max-height: 70vh;
   min-height: 20vh;
   display: flex;
   padding: 2.5%;
   overflow-y: scroll;
   justify-content: space-around;
   align-items: center;
+  border: 2px dashed #4c132c;
   flex-flow: row wrap;
   -webkit-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
   -moz-box-shadow: 0px 0px 37px -3px rgba(0, 0, 0, 0.51);
