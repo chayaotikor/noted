@@ -1,10 +1,12 @@
-#Schema
-##Notes
--title
--text
--createdAt
--updatedAt
+# Noted
 
-##Users
--email
--password
+*A simple web application for taking notes*
+
+---
+
+## Tech Stack
+
+- React + Redux
+- Node + Express
+- MongoDB + Mongoose
+- Styled Components
