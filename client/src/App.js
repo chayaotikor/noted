@@ -123,7 +123,7 @@ class App extends Component {
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
           <TopBarContainer>
-            <AppHeader mode={this.props.mode}>Noted</AppHeader>
+            <AppHeader mode={this.props.mode} style={{width: '100%'}}>Noted</AppHeader>
           </TopBarContainer>
             <Redirect from="/" exact to="/auth" />
             <Route
