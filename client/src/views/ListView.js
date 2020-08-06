@@ -30,7 +30,7 @@ export const ListView = ({
   noteId,
 }) => {
   useEffect(() => {
-    if (localStorage.getItem("TOKEN") !== null) {
+    if (localStorage.getItem("TOKEN") !== null && localStorage.getItem('ID') !== null) {
       requestNotes();
       setTimeout(() => {
         setLoading(false);
