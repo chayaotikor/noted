@@ -118,7 +118,6 @@ export const register = ({ email, password }) => (dispatch) => {
 
 export const requestNotes = () => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
-  console.log(localStorage.getItem('ID'))
   axios({
     method: "post",
     baseURL: `${process.env.REACT_APP_DB_URL}`,
@@ -219,7 +218,6 @@ export const addNote = (note) => (dispatch) => {
     },
   })
     .then((response) => {
-      console.log(response);
       dispatch({ type: ADD, payload: response.data.data.addNote });
     })
     .catch((err) => {
@@ -256,7 +254,6 @@ export const editNote = (note) => (dispatch) => {
     },
   })
     .then((response) => {
-      console.log(response);
       dispatch({ type: UPDATE, payload: response.data.data.editNote });
     })
     .catch((err) => {
@@ -272,7 +269,6 @@ export const editNote = (note) => (dispatch) => {
 };
 
 export const deleteNote = (noteId) => (dispatch) => {
-  console.log(noteId);
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",

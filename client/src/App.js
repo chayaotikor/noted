@@ -10,7 +10,7 @@ import {
   LogoutButton,
   TopBarContainer,
 } from "./style";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   login,
@@ -27,16 +27,16 @@ import {
   setLoading,
   getNote,
   logout,
-  sort
+  sort,
 } from "./actions";
 //Views
-import { ListView } from "./views/ListView";
+import { ListPage } from "./components/ListPage";
+import { NotePage } from "./components/NotePage";
+import SettingsPage from "./components/SettingsPage";
 
 //Components
-import { NoteComponent } from "./components/NoteComponent";
-import FormComponent from "./components/FormComponent";
-import SettingsView from "./views/SettingsView";
-import Authentication from "./components/Authentication";
+import FormPage from "./components/FormPage";
+import AuthPage from "./components/AuthPage";
 
 class App extends Component {
   //Loading
@@ -59,8 +59,8 @@ class App extends Component {
   //Search&Sort Methods
   sort = (e) => {
     e.preventDefault();
-    this.props.sort(e.target.value)
-  }
+    this.props.sort(e.target.value);
+  };
 
   sortAscending = () => {
     this.props.sortAscending();
@@ -90,7 +90,7 @@ class App extends Component {
   };
   changePassword = (credentials) => {
     this.props.changePassword(credentials);
-  }
+  };
   logout = () => {
     const message = "Logged out successfully.";
     this.props.logout(message);
@@ -117,30 +117,7 @@ class App extends Component {
   };
 
   render() {
-    if (localStorage.getItem("TOKEN") === null) {
-      return (
-        <>
-          <GlobalStyle />
-          <AppContainer mode={this.props.mode}>
-          <TopBarContainer>
-            <AppHeader mode={this.props.mode} style={{width: '100%'}}>Noted</AppHeader>
-          </TopBarContainer>
-            <Redirect from="/" exact to="/auth" />
-            <Route
-              exact
-              path={"/auth"}
-              render={(props) => (
-                <Authentication
-                  {...props}
-                  login={this.login}
-                  register={this.register}
-                />
-              )}
-            />
-          </AppContainer>
-        </>
-      );
-    } else {
+    if (localStorage.getItem('TOKEN')) {
       return (
         <>
           <GlobalStyle />
@@ -152,25 +129,38 @@ class App extends Component {
                   this.toggleMode("settings");
                 }}
               />
-                <SearchInput
-                  onChange={(e) => this.search(e)}
-                  placeholder={"search notes..."}
-                  type="text"
-                  mode={this.props.mode}
-                />
+              <SearchInput
+                onChange={(e) => this.search(e)}
+                placeholder={"search notes..."}
+                type="text"
+                mode={this.props.mode}
+              />
               <AppHeader mode={this.props.mode}>Noted</AppHeader>
-                <SortContainer mode={this.props.mode}
+              <SortContainer
+                mode={this.props.mode}
                 defaultValue="sort..."
-                onClick={e =>{ e.target.defaultValue = e.target.value; console.log(e.target.defaultValue)}}
-                >
-                <SortOption value="sort..." disabled hidden>sort...</SortOption>
-                  <SortOption value="ascending" onClick={e => this.sort(e)}>Title (Ascending)</SortOption>
-                  <SortOption value="descending" onClick={e => this.sort(e)}>Title (Descending)</SortOption>
-                  <SortOption value="newest" onClick={e => this.sort(e)}>Date (Newest)</SortOption>
-                  <SortOption value="oldest" onClick={e => this.sort(e)}>Date (Oldest)</SortOption>
-                </SortContainer>
+                onClick={(e) => {
+                  e.target.defaultValue = e.target.value;
+                }}
+              >
+                <SortOption value="sort..." disabled hidden>
+                  sort...
+                </SortOption>
+                <SortOption value="ascending" onClick={(e) => this.sort(e)}>
+                  Title (Ascending)
+                </SortOption>
+                <SortOption value="descending" onClick={(e) => this.sort(e)}>
+                  Title (Descending)
+                </SortOption>
+                <SortOption value="newest" onClick={(e) => this.sort(e)}>
+                  Date (Newest)
+                </SortOption>
+                <SortOption value="oldest" onClick={(e) => this.sort(e)}>
+                  Date (Oldest)
+                </SortOption>
+              </SortContainer>
               <LogoutButton
-                to="/auth"
+                to="/"
                 onClick={() => {
                   this.logout();
                 }}
@@ -184,7 +174,7 @@ class App extends Component {
                 exact
                 path={"/notes"}
                 render={(props) => (
-                  <ListView
+                  <ListPage
                     requestNotes={this.requestNotes}
                     notes={
                       this.props.filteredNotes
@@ -212,9 +202,26 @@ class App extends Component {
               />
               <Route
                 exact
+                path={"/notes/:id"}
+                render={(props) => (
+                  <NotePage
+                    {...props}
+                    toggleMode={this.toggleMode}
+                    component="single"
+                    getNote={this.getNote}
+                    setLoading={this.setLoading}
+                    loading={this.props.loading}
+                    note={this.props.note}
+                    id={this.props.noteId}
+                    history={this.history}
+                  />
+                )}
+              />
+              <Route
+                exact
                 path={"/notes/:id/edit"}
                 render={(props) => (
-                  <FormComponent
+                  <FormPage
                     {...props}
                     header={"Update Existing Note"}
                     mode={this.props.mode}
@@ -233,30 +240,9 @@ class App extends Component {
               />
 
               <Route
-                exact
-                path={"/notes/:id"}
-                render={(props) => (
-                  <NoteComponent
-                    {...props}
-                    setLoading={this.setLoading}
-                    note={this.props.note}
-                    toggleMode={this.toggleMode}
-                    deleteNote={this.deleteNote}
-                    editNote={this.editNote}
-                    id={this.props.noteId}
-                    mode={this.props.mode}
-                    loading={this.props.loading}
-                    getNote={this.getNote}
-                    title={this.props.title}
-                    textBody={this.props.textBody}
-                  />
-                )}
-              />
-
-              <Route
                 path={"/form/create"}
                 render={(props) => (
-                  <FormComponent
+                  <FormPage
                     header={"Create New Note"}
                     mode={this.props.mode}
                     toggleMode={this.toggleMode}
@@ -270,7 +256,7 @@ class App extends Component {
               <Route
                 path={"/settings"}
                 render={(props) => (
-                  <SettingsView
+                  <SettingsPage
                     history={props.history}
                     mode={this.props.mode}
                     toggleMode={this.toggleMode}
@@ -281,6 +267,15 @@ class App extends Component {
             </Switch>
           </AppContainer>
         </>
+      );
+    } else {
+      return (
+        <AuthPage
+          login={this.login}
+          register={this.register}
+          history={this.props.history}
+          mode={this.props.mode}
+        />
       );
     }
   }

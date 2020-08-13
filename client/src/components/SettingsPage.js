@@ -9,7 +9,7 @@ import {
   AuthFormActions
 } from "../style/auth-styles";
 
-class Settings extends Component {
+class SettingsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,4 +71,4 @@ class Settings extends Component {
   }
 }
 
-export default Settings;
+export default SettingsPage;

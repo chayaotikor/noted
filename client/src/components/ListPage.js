@@ -16,7 +16,7 @@ import {
   H1,
 } from "../style";
 
-export const ListView = ({
+export const ListPage = ({
   notes,
   toggleMode,
   requestNotes,
