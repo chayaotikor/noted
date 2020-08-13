@@ -3,21 +3,21 @@ const responseStatus = require("./responseStatuses");
 function errorHandler(error) {
   switch (error) {
     case responseStatus.badRequest:
-		throw new Error("Required fields cannot be blank.")
+		throw Error("Required fields cannot be blank.")
     case responseStatus.badCredentials:
-		throw new Error("Incorrect credentials.")
+		throw Error("Incorrect credentials.")
     case responseStatus.forbiddenAccess:
-		throw new Error("You are not authorized to view this content.")
+		throw Error("You are not authorized.")
     case responseStatus.userNotFound:
-    throw new Error("This user does not exist.")
+    throw Error("This user does not exist.")
     case responseStatus.noteNotFound:
-    throw new Error("This note does not exist.")
+    throw Error("This note does not exist.")
     case responseStatus.conflict:
-		throw new Error("User already exists.")
+		throw Error("User already exists.")
     case responseStatus.serverError:
-		throw new Error("The request could not be completed. Please try again later.")
+		throw Error("The request could not be completed. Please try again later.")
     default:
-    throw new Error(error.message);
+    throw Error(error.message);
   }
 }
 

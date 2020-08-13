@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-  GlobalStyle,
-  AppContainer,
-  AppHeader,
-  SortOption,
-  SearchInput,
-  SettingsButton,
-  SortContainer,
-  LogoutButton,
-  TopBarContainer,
-} from "./style";
+import { GlobalStyle, AppContainer } from "./style";
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -29,14 +19,15 @@ import {
   logout,
   sort,
 } from "./actions";
-//Views
+
+//Components
 import { ListPage } from "./components/ListPage";
 import { NotePage } from "./components/NotePage";
 import SettingsPage from "./components/SettingsPage";
-
-//Components
 import FormPage from "./components/FormPage";
 import AuthPage from "./components/AuthPage";
+import { Ticker } from "./components/Ticker";
+import { TopBar } from "./components/TopBar";
 
 class App extends Component {
   //Loading
@@ -56,6 +47,7 @@ class App extends Component {
   setId = (id) => {
     this.props.setId(id);
   };
+
   //Search&Sort Methods
   sort = (e) => {
     e.preventDefault();
@@ -117,58 +109,23 @@ class App extends Component {
   };
 
   render() {
-    if (localStorage.getItem('TOKEN')) {
+    if (localStorage.getItem("TOKEN")) {
       return (
         <>
           <GlobalStyle />
           <AppContainer mode={this.props.mode}>
-            <TopBarContainer>
-              <SettingsButton
-                to="/settings"
-                onClick={() => {
-                  this.toggleMode("settings");
-                }}
-              />
-              <SearchInput
-                onChange={(e) => this.search(e)}
-                placeholder={"search notes..."}
-                type="text"
-                mode={this.props.mode}
-              />
-              <AppHeader mode={this.props.mode}>Noted</AppHeader>
-              <SortContainer
-                mode={this.props.mode}
-                defaultValue="sort..."
-                onClick={(e) => {
-                  e.target.defaultValue = e.target.value;
-                }}
-              >
-                <SortOption value="sort..." disabled hidden>
-                  sort...
-                </SortOption>
-                <SortOption value="ascending" onClick={(e) => this.sort(e)}>
-                  Title (Ascending)
-                </SortOption>
-                <SortOption value="descending" onClick={(e) => this.sort(e)}>
-                  Title (Descending)
-                </SortOption>
-                <SortOption value="newest" onClick={(e) => this.sort(e)}>
-                  Date (Newest)
-                </SortOption>
-                <SortOption value="oldest" onClick={(e) => this.sort(e)}>
-                  Date (Oldest)
-                </SortOption>
-              </SortContainer>
-              <LogoutButton
-                to="/"
-                onClick={() => {
-                  this.logout();
-                }}
-              >
-                Logout
-              </LogoutButton>
-            </TopBarContainer>
-
+            <TopBar
+              sort={this.sort}
+              search={this.search}
+              mode={this.props.mode}
+              toggleMode={this.toggleMode}
+              logout={this.logout}
+            />
+            <Ticker
+              message={this.props.message}
+              ticker={this.props.ticker}
+              error={this.props.error}
+            />
             <Switch>
               <Route
                 exact
@@ -261,6 +218,7 @@ class App extends Component {
                     mode={this.props.mode}
                     toggleMode={this.toggleMode}
                     changePassword={this.changePassword}
+                    setLoading={this.setLoading}
                   />
                 )}
               />
@@ -275,6 +233,9 @@ class App extends Component {
           register={this.register}
           history={this.props.history}
           mode={this.props.mode}
+          ticker={this.props.ticker}
+          error={this.props.error}
+          message={this.props.message}
         />
       );
     }
@@ -286,6 +247,9 @@ const mapStateToProps = (state) => ({
   newId: state.newId,
   mode: state.mode,
   modal: state.modal,
+  message: state.message,
+  ticker: state.ticker,
+  error: state.error,
   noteId: state.currentNote._id,
   title: state.currentNote.title,
   textBody: state.currentNote.textBody,

@@ -5,16 +5,10 @@ import {
   NoteListSection,
   DeleteButton,
   ModalDiv,
-  ListViewContainer
+  ListViewContainer,
 } from "../style/note-styles";
 
-import {
-  H2,
-  Button,
-  ButtonContainer,
-  LoadingSpan,
-  H1,
-} from "../style";
+import { H2, Button, ButtonContainer, LoadingSpan, H1 } from "../style";
 
 export const ListPage = ({
   notes,
@@ -30,7 +24,10 @@ export const ListPage = ({
   noteId,
 }) => {
   useEffect(() => {
-    if (localStorage.getItem("TOKEN") !== null && localStorage.getItem('ID') !== null) {
+    if (
+      localStorage.getItem("TOKEN") !== null &&
+      localStorage.getItem("ID") !== null
+    ) {
       requestNotes();
       setTimeout(() => {
         setLoading(false);
@@ -43,31 +40,31 @@ export const ListPage = ({
   } else {
     return (
       <ListViewContainer>
-
         {notes.length > 0 ? (
           <NoteListSection>
             {notes.map((note, index) => (
               <NoteContainer key={index}>
-                  <DeleteButton
-                    onClick={(event) => {
-                      toggleModal(true);
-                      setId(note._id);
-                      setLoading(false)
-                    }}
-                  />
-                <NoteLink 
-                to={`/notes/${note._id}`}
-                onClick={(e) => {
-                  toggleMode("single");
-                  setId(note._id);
-                }}>
+                <DeleteButton
+                  onClick={(event) => {
+                    toggleModal(true);
+                    setId(note._id);
+                    setLoading(false);
+                  }}
+                />
+                <NoteLink
+                  to={`/notes/${note._id}`}
+                  onClick={(e) => {
+                    toggleMode("single");
+                    setId(note._id);
+                  }}
+                >
                   <H2 component="list">{note.title}</H2>
                 </NoteLink>
-                </NoteContainer>
+              </NoteContainer>
             ))}
           </NoteListSection>
         ) : null}
-          <ButtonContainer>
+        <ButtonContainer>
           <Button
             onClick={(event) => {
               event.preventDefault();

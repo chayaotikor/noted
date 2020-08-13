@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import {
-  Button
-} from "../style";
+import { Button } from "../style";
 import {
   AuthForm,
   AuthFormInput,
   AuthFormHeading,
-  AuthFormActions
+  AuthFormActions,
 } from "../style/auth-styles";
+import { Link } from "react-router-dom";
 
 class SettingsPage extends Component {
   constructor(props) {
@@ -31,21 +30,25 @@ class SettingsPage extends Component {
     });
   };
 
-  handleSubmit = async (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    await this.props.changePassword(this.state.credentials)
-    setTimeout(()=>{
-    this.props.history.push('/notes')
-    }, 1000)
+    e.persist()
+    this.props.setLoading(true);
+    this.props.changePassword(this.state.credentials);
+    setTimeout(() => {
+      e.target[0].value = "";
+      e.target[1].value = "";
+    }, 2000);
   };
-
 
   render() {
     return (
-      <AuthForm onSubmit={e => { this.handleSubmit(e)}}>
-        <AuthFormHeading>
-          User Settings
-        </AuthFormHeading>
+      <AuthForm
+        onSubmit={(e) => {
+          this.handleSubmit(e);
+        }}
+      >
+        <AuthFormHeading>User Settings</AuthFormHeading>
         <AuthFormInput
           type="password"
           name="oldPassword"
@@ -58,11 +61,8 @@ class SettingsPage extends Component {
           placeholder="New Password"
           onChange={this.handleChange}
         ></AuthFormInput>
-        <AuthFormActions style={{justifyContent: 'center'}}>
-          <Button
-          type='submit'
-            auth
-          >
+        <AuthFormActions style={{ justifyContent: "center" }}>
+          <Button type="submit" auth>
             Update
           </Button>
         </AuthFormActions>

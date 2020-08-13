@@ -9,8 +9,7 @@ export const NotePage = ({
   getNote,
   setLoading,
   loading,
-  match,
-  id
+  id,
 }) => {
   useEffect(() => {
     if (localStorage.getItem("TOKEN") !== null) {

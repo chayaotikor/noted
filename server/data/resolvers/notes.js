@@ -5,10 +5,15 @@ const errorHandler = require("../../config/errorHandler");
 const responseStatus = require("../../config/responseStatuses");
 
 module.exports = {
-  getAllNotes: async ({userId}) => {
+  getAllNotes: async ({ userId }) => {
     // seedingFunction()
     try {
-      const notes = await Note.find({createdBy: userId}).sort({ updatedAt: 'desc'});
+      if (userId === "null") {
+        errorHandler(responseStatus.forbiddenAccess);
+      }
+      const notes = await Note.find({ createdBy: userId }).sort({
+        updatedAt: "desc",
+      });
       return notes.map((note) => {
         return { ...note._doc };
       });
@@ -17,19 +22,17 @@ module.exports = {
     }
   },
 
-  getNote: async ({noteId}) => {
-
+  getNote: async ({ noteId }) => {
     try {
       const note = await Note.findOne({ _id: noteId });
-      if(!note){
+      if (!note) {
         errorHandler(responseStatus.noteNotFound);
       }
-      return {...note._doc}
+      return { ...note._doc };
     } catch (err) {
       errorHandler(err);
     }
   },
-
 
   addNote: async ({ content, userId }, req) => {
     const noteContent = new Note({
@@ -38,6 +41,15 @@ module.exports = {
       createdBy: userId,
     });
     try {
+      if (userId === "null") {
+        errorHandler(responseStatus.forbiddenAccess);
+      }
+      if (
+        noteContent.title === "undefined" ||
+        noteContent.textBody === "undefined"
+      ) {
+        errorHandler(responseStatus.badRequest);
+      }
       const newNote = await noteContent.save();
       const user = await User.findById(userId);
       if (!user) {
@@ -52,19 +64,19 @@ module.exports = {
     }
   },
 
-  editNote: async ({content, noteId}) => {
+  editNote: async ({ content, noteId }) => {
     try {
       const note = await Note.findOne({ _id: noteId });
-      if(!note){
+      if (!note) {
         errorHandler(responseStatus.noteNotFound);
       } else {
-        if(content.title){
-          note.title = content.title
+        if (content.title) {
+          note.title = content.title;
         }
-        if(content.textBody){
-          note.textBody = content.textBody
+        if (content.textBody) {
+          note.textBody = content.textBody;
         }
-        await note.save()
+        await note.save();
         return { ...note._doc };
       }
     } catch (err) {
@@ -72,23 +84,25 @@ module.exports = {
     }
   },
 
-  deleteNote: async ({noteId, userId}) => {
+  deleteNote: async ({ noteId, userId }) => {
     try {
+      if (userId === "null") {
+        errorHandler(responseStatus.forbiddenAccess);
+      }
       const note = await Note.findOne({ _id: noteId });
       const user = await User.findById(userId);
 
-      if(!note){
+      if (!note) {
         errorHandler(responseStatus.noteNotFound);
-      } else if(!user) {
+      } else if (!user) {
         errorHandler(responseStatus.userNotFound);
       } else {
-        note.remove()
-        await user.save()
-        return {...user._doc}
+        note.remove();
+        await user.save();
+        return { ...user._doc };
       }
     } catch (err) {
       errorHandler(err);
     }
-  }
-
+  },
 };
