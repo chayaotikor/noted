@@ -140,7 +140,7 @@ export const LogoutButton = styled(Link)`
 
 export const SettingsButton = styled(Link)`
   height: 2.4rem;
-  width: 2.4rem;
+  width: 75px;
   background: none;
   background-image: url(${settingsIcon});
   background-position: center;
@@ -151,8 +151,9 @@ export const SettingsButton = styled(Link)`
   }
 `;
 
-export const AppHeader = styled.h1`
+export const AppHeader = styled(Link)`
   font-family: "Dancing Script", cursive;
+  text-decoration: none;
   font-size: 4rem;
   color: #4c132c;
   text-align: center;

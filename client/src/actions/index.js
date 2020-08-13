@@ -36,7 +36,14 @@ export const login = ({ email, password }) => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({ type: LOGIN, payload: response.data.data.login });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: LOGIN, payload: response.data.data.login });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -45,12 +52,12 @@ export const login = ({ email, password }) => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
 
-export const changePassword = ({oldPassword, newPassword}) =>(dispatch) => {
+export const changePassword = ({ oldPassword, newPassword }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
   axios({
     method: "post",
@@ -58,7 +65,9 @@ export const changePassword = ({oldPassword, newPassword}) =>(dispatch) => {
     data: {
       query: `
 		mutation {
-			changePassword(email: "${localStorage.getItem('EMAIL')}", oldPassword: "${oldPassword}", newPassword: "${newPassword}"){
+			changePassword(email: "${localStorage.getItem(
+        "EMAIL"
+      )}", oldPassword: "${oldPassword}", newPassword: "${newPassword}"){
 			  _id
 			  email
 			  token
@@ -69,7 +78,17 @@ export const changePassword = ({oldPassword, newPassword}) =>(dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({ type: CHANGEPASSWORD, payload: response.data.data.changePassword });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: CHANGEPASSWORD,
+          payload: response.data.data.changePassword,
+        });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -78,10 +97,10 @@ export const changePassword = ({oldPassword, newPassword}) =>(dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
-}
+};
 
 export const register = ({ email, password }) => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
@@ -102,7 +121,14 @@ export const register = ({ email, password }) => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({ type: REGISTER, payload: response.data.data.register });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: REGISTER, payload: response.data.data.register });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -111,7 +137,7 @@ export const register = ({ email, password }) => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
@@ -127,7 +153,7 @@ export const requestNotes = () => (dispatch) => {
     data: {
       query: `
       {
-        getAllNotes(userId: "${localStorage.getItem('ID')}") {
+        getAllNotes(userId: "${localStorage.getItem("ID")}") {
           _id
           title
           textBody
@@ -138,10 +164,18 @@ export const requestNotes = () => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({
-        type: REQUEST_SUCCESS,
-        payload: response.data.data.getAllNotes,
-      });
+      console.log(response)
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: REQUEST_SUCCESS,
+          payload: response.data.data.getAllNotes,
+        });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -150,7 +184,7 @@ export const requestNotes = () => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
@@ -177,10 +211,17 @@ export const getNote = (id) => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({
-        type: GETNOTE,
-        payload: response.data.data.getNote,
-      });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: GETNOTE,
+          payload: response.data.data.getNote,
+        });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -189,7 +230,7 @@ export const getNote = (id) => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
@@ -218,7 +259,14 @@ export const addNote = (note) => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({ type: ADD, payload: response.data.data.addNote });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: ADD, payload: response.data.data.addNote });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -227,7 +275,7 @@ export const addNote = (note) => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
@@ -254,7 +302,14 @@ export const editNote = (note) => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({ type: UPDATE, payload: response.data.data.editNote });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({ type: UPDATE, payload: response.data.data.editNote });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -263,7 +318,7 @@ export const editNote = (note) => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
@@ -294,10 +349,17 @@ export const deleteNote = (noteId) => (dispatch) => {
     },
   })
     .then((response) => {
-      dispatch({
-        type: DELETE,
-        payload: response.data.data.deleteNote.createdNotes,
-      });
+      if (response.data.errors) {
+        dispatch({
+          type: REQUEST_ERROR,
+          payload: response.data.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: DELETE,
+          payload: response.data.data.deleteNote.createdNotes,
+        });
+      }
     })
     .catch((err) => {
       if (err.response) {
@@ -306,70 +368,70 @@ export const deleteNote = (noteId) => (dispatch) => {
           payload: err.response.data.errors[0].message,
         });
       } else {
-        dispatch({ type: REQUEST_ERROR, payload: err });
+        dispatch({ type: REQUEST_ERROR, payload: err.message });
       }
     });
 };
 
 export const sort = (type) => (dispatch) => {
-if(type === 'ascending'){
-  function compare(a, b) {
-    const titleA = a.title.toUpperCase();
-    const titleB = b.title.toUpperCase();
-    let comparison = 0;
-    if (titleA > titleB) {
-      comparison = 1;
-    } else if (titleA < titleB) {
-      comparison = -1;
+  if (type === "ascending") {
+    function compare(a, b) {
+      const titleA = a.title.toUpperCase();
+      const titleB = b.title.toUpperCase();
+      let comparison = 0;
+      if (titleA > titleB) {
+        comparison = 1;
+      } else if (titleA < titleB) {
+        comparison = -1;
+      }
+      return comparison;
     }
-    return comparison;
+    dispatch({ type: SORT, payload: compare });
   }
-  dispatch({ type: SORT, payload: compare });
-} 
 
-if (type === 'descending'){
-  function compare(a, b) {
-    const titleA = a.title.toUpperCase();
-    const titleB = b.title.toUpperCase();
-    let comparison = 0;
-    if (titleA < titleB) {
-      comparison = 1;
-    } else if (titleA > titleB) {
-      comparison = -1;
+  if (type === "descending") {
+    function compare(a, b) {
+      const titleA = a.title.toUpperCase();
+      const titleB = b.title.toUpperCase();
+      let comparison = 0;
+      if (titleA < titleB) {
+        comparison = 1;
+      } else if (titleA > titleB) {
+        comparison = -1;
+      }
+      return comparison;
     }
-    return comparison;
+    dispatch({ type: SORT, payload: compare });
   }
-  dispatch({ type: SORT, payload: compare });
-}
- if(type === 'newest' ){
-  function compare(a, b) {
-    const dateA = a.updatedAt;
-    const dateB = b.updatedAt;
-    let comparison = 0;
-    if (dateA < dateB) {
-      comparison = 1;
-    } else if (dateA > dateB) {
-      comparison = -1;
+  if (type === "newest") {
+    function compare(a, b) {
+      const dateA = a.updatedAt;
+      const dateB = b.updatedAt;
+      let comparison = 0;
+      if (dateA < dateB) {
+        comparison = 1;
+      } else if (dateA > dateB) {
+        comparison = -1;
+      }
+      return comparison;
     }
-    return comparison;
+    dispatch({ type: SORT, payload: compare });
   }
-  dispatch({ type: SORT, payload: compare });
- }
- if(type === 'oldest' ){
-  function compare(a, b) {
-    const dateA = a.updatedAt;
-    const dateB = b.updatedAt;
-    let comparison = 0;
-    if (dateA > dateB) {
-      comparison = 1;
-    } else if (dateA < dateB) {
-      comparison = -1;
+  if (type === "oldest") {
+    function compare(a, b) {
+      const dateA = a.updatedAt;
+      const dateB = b.updatedAt;
+      let comparison = 0;
+      if (dateA > dateB) {
+        comparison = 1;
+      } else if (dateA < dateB) {
+        comparison = -1;
+      }
+      return comparison;
     }
-    return comparison;
+    dispatch({ type: SORT, payload: compare });
   }
-  dispatch({ type: SORT, payload: compare });
- }
-}
+};
 
 export const searching = (list) => (dispatch) => {
   dispatch({ type: SEARCH, payload: list });
@@ -390,5 +452,5 @@ export const setLoading = (bool) => (dispatch) => {
 
 export const logout = (message) => (dispatch) => {
   localStorage.clear();
-  dispatch({type: LOGOUT, payload: message})
-}
+  dispatch({ type: LOGOUT, payload: message });
+};

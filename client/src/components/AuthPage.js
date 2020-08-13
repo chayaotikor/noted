@@ -4,20 +4,21 @@ import {
   GlobalStyle,
   AppContainer,
   AppHeader,
-  TopBarContainer
+  TopBarContainer,
 } from "../style";
 import {
   AuthForm,
   AuthFormInput,
   AuthFormHeading,
-  AuthFormActions
+  AuthFormActions,
 } from "../style/auth-styles";
+import { Ticker } from "./Ticker";
 
 class AuthPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 'login',
+      mode: "login",
       credentials: {
         email: "",
         password: "",
@@ -38,47 +39,50 @@ class AuthPage extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    if (this.state.mode === 'login') {
+    if (this.state.mode === "login") {
       this.props.login(this.state.credentials);
     }
-    if (this.state.mode === 'register') {
-      this.props.register(this.state.credentials)
+    if (this.state.mode === "register") {
+      this.props.register(this.state.credentials);
     }
-    
-    setTimeout(()=>{
-      if(localStorage.getItem('TOKEN') !== null && localStorage.getItem('ID') !== null){
-        this.props.history.push('/notes')
+
+    setTimeout(() => {
+      if (
+        localStorage.getItem("TOKEN") !== null &&
+        localStorage.getItem("ID") !== null
+      ) {
+        this.props.history.push("/notes");
       } else {
-        this.props.history.push('/auth')
+        this.props.history.push("/auth");
       }
-    }, 3000)
+    }, 3000);
   };
 
   toggleAuthMode = () => {
-    if(this.state.mode === 'login'){
+    if (this.state.mode === "login") {
       this.setState({
-          ...this.state,
-          mode: 'register'
+        ...this.state,
+        mode: "register",
       });
     } else {
-        this.setState({
-            ...this.state,
-            mode: 'login'
-        });
-    };
-  }
+      this.setState({
+        ...this.state,
+        mode: "login",
+      });
+    }
+  };
 
   render() {
     return (
       <>
         <GlobalStyle />
-        <AppContainer mode='auth'>
+        <AppContainer mode="auth">
           <TopBarContainer>
-            <AppHeader mode='auth' style={{ width: "100%" }}>
+            <AppHeader mode="auth" style={{ width: "100%" }} to="/">
               Noted
             </AppHeader>
           </TopBarContainer>
-
+          <Ticker ticker={this.props.ticker} error={this.props.error} message={this.props.message}/>
           <AuthForm
             onSubmit={(e) => {
               this.handleSubmit(e);

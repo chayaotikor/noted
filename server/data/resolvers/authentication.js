@@ -50,9 +50,14 @@ module.exports = {
 
   changePassword: async ({email, oldPassword, newPassword}) => {
     try {
+      console.log(newPassword)
       const user = await User.findOne({ email: email });
       if (!user) {
        errorHandler(responseStatus.badCredentials);
+      }
+
+      if (newPassword === '') {
+        errorHandler(responseStatus.badRequest)
       }
       const correctCreds = await bcrypt.compareSync(oldPassword, user.password);
       if (!correctCreds) {

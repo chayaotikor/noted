@@ -29,6 +29,7 @@ const initialState = {
   modal: false,
   loading: true,
   currentNote: {},
+  ticker: null
 };
 
 export const reducer = (state = initialState, action) => {
@@ -37,12 +38,14 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         message: null,
+        ticker: null,
       };
     case REQUEST_ERROR:
       return {
         ...state,
         error: action.payload,
         message: null,
+        ticker: 'error',
       };
     case REQUEST_SUCCESS:
       return {
@@ -50,6 +53,7 @@ export const reducer = (state = initialState, action) => {
         error: null,
         notes: action.payload,
         message: null,
+        ticker: null,
         loading: true,
       };
 
@@ -59,6 +63,7 @@ export const reducer = (state = initialState, action) => {
         message: null,
         currentNote: action.payload,
         loading: true,
+        ticker: null,
       };
     case ADD:
       return {
@@ -67,6 +72,7 @@ export const reducer = (state = initialState, action) => {
         newId: action.id,
         notes: [...state.notes],
         message: "Note added successfully.",
+        ticker: 'success',
         loading: false,
         currentNote: action.payload,
       };
@@ -76,6 +82,7 @@ export const reducer = (state = initialState, action) => {
         error: null,
         notes: [...state.notes],
         message: "Note updated successfully.",
+        ticker: "success",
         loading: false,
         currentNote: action.payload,
       };
@@ -85,6 +92,7 @@ export const reducer = (state = initialState, action) => {
         error: null,
         notes: action.payload,
         message: "Note deleted successfully.",
+        ticker: "success",
         loading: false,
         currentNote: {},
       };
@@ -128,26 +136,34 @@ export const reducer = (state = initialState, action) => {
         ...state,
         notes: [],
         filteredNotes: null,
-        mode: 'list',
+        mode: "list",
+        error: null,
+        ticker: "success",
         message: action.payload,
       };
     case LOGIN:
       return {
         ...state,
+        error: null,
         message: "Logged in successfully.",
-        loading: true
+        ticker: "success",
+        loading: true,
       };
     case REGISTER:
       return {
         ...state,
+        error: null,
         message: "Registration successful.",
-        loading: true
+        ticker: "success",
+        loading: true,
       };
     case CHANGEPASSWORD:
       return {
         ...state,
+        error: null,
         message: "Password changed successfully.",
-        loading: false
+        ticker: "success",
+        loading: false,
       };
 
     default:
