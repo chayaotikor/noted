@@ -118,6 +118,7 @@ export const register = ({ email, password }) => (dispatch) => {
 
 export const requestNotes = () => (dispatch) => {
   dispatch({ type: REQUEST_SENT });
+  console.log(localStorage.getItem('ID'))
   axios({
     method: "post",
     baseURL: `${process.env.REACT_APP_DB_URL}`,
