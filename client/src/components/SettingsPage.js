@@ -6,7 +6,6 @@ import {
   AuthFormHeading,
   AuthFormActions,
 } from "../style/auth-styles";
-import { Link } from "react-router-dom";
 
 class SettingsPage extends Component {
   constructor(props) {
