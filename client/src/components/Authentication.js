@@ -42,7 +42,7 @@ class Authentication extends Component {
     }
     
     setTimeout(()=>{
-      if(localStorage.getItem('TOKEN') !== null){
+      if(localStorage.getItem('TOKEN') !== null && localStorage.getItem('ID') !== null){
         this.props.history.push('/notes')
       } else {
         this.props.history.push('/auth')
