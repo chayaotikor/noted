@@ -78,6 +78,7 @@ export const ListPage = ({
         <ModalDiv modal={modal}>
           <H1 component="delete">Confirm Delete Note</H1>
           <Button
+            auth
             onClick={(event) => {
               event.preventDefault();
               toggleMode("list");
@@ -88,6 +89,7 @@ export const ListPage = ({
             Delete
           </Button>
           <Button
+            auth
             onClick={(event) => {
               event.preventDefault();
               toggleMode("list");
