@@ -39,4 +39,5 @@ export const TickerContainer = styled.div`
 export const TickerMessage = styled.p`
          color: white;
          font-family: "Montserrat", sans-serif;
+         text-align: center;
        `;
