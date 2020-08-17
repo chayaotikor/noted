@@ -27,15 +27,10 @@ class FormPage extends Component {
 
   handleMode = () => {
     if (this.props.mode === "create") {
-      this.props.toggleMode("list");
-      this.props.setLoading(true);
       return this.props.addNote(this.state.note);
     } else if (this.props.mode === "edit") {
-      this.props.toggleMode("single");
-      this.props.setLoading(true);
       return this.props.editNote(this.state.note);
     } else {
-      this.props.toggleMode("list");
       return null;
     }
   };
@@ -76,6 +71,14 @@ class FormPage extends Component {
               type="submit"
               component="form"
               onClick={(event) => {
+
+                if (this.props.mode === "edit") {
+                  this.props.toggleMode("single");
+                  this.props.setLoading(true);
+                } else {
+                  this.props.toggleMode("list");
+                  this.props.setLoading(true);
+                }
                 this.handleMode();
               }}
             >

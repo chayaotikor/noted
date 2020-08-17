@@ -53,7 +53,7 @@ class AuthPage extends Component {
       ) {
         this.props.history.push("/notes");
       } else {
-        this.props.history.push("/auth");
+        this.props.history.push("/");
       }
     }, 3000);
   };

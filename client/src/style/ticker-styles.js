@@ -17,7 +17,7 @@ const appear = keyframes`
 
 export const TickerContainer = styled.div`
          display: ${(props) => (props.ticker === null ? "none" : "flex")};
-         animation: ${appear} 2s ease-out 1;
+         animation: ${appear} 3s ease-out 1;
          animation-fill-mode: backwards;
          width: 200px;
          justify-content: center;

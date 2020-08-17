@@ -37,7 +37,7 @@ class SettingsPage extends Component {
     setTimeout(() => {
       e.target[0].value = "";
       e.target[1].value = "";
-    }, 2000);
+    }, 4000);
   };
 
   render() {
