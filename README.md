@@ -8,5 +8,5 @@
 
 - React + Redux
 - Node + Express
-- MongoDB + Mongoose
+- MongoDB + Mongoose + GraphQL
 - Styled Components
